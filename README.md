@@ -57,12 +57,9 @@ Enterprise.
   forward cleanly instead of leaving stale values behind.
 
 Deliberately out of scope: POS folio integration, a guest-facing portal, and OTA
-channel-manager live sync (only manual `source`/`external_ref` logging) — see
-[PHASES.md](PHASES.md)'s "Out of scope" section.
+channel-manager live sync (only manual `source`/`external_ref` logging).
 
-Full decision-by-decision build history (including the bugs each mechanism above
-actually caught, not just what shipped) lives in [CLAUDE.md](CLAUDE.md); phase-by-phase
-spec in [PHASES.md](PHASES.md); release notes in [CHANGELOG.md](CHANGELOG.md).
+Release notes live in [CHANGELOG.md](CHANGELOG.md).
 
 ## Installation
 
@@ -135,9 +132,9 @@ only becomes scoped once you explicitly assign properties to a user (Settings �
 → open a user → **Access Rights** tab → **Hostel Properties** field). Once a user has
 at least one property assigned, they only see that property's rooms/beds/bookings/
 folios/housekeeping tasks; **Hostel Manager is never restricted**, regardless of this
-field. This fallback (empty = unrestricted, not "restricted to nothing") is deliberate
-— see `CLAUDE.md`'s Phase 9 entry for why a naive `in` domain would have silently
-locked out every user on a single-property install.
+field. This fallback (empty = unrestricted, not "restricted to nothing") is deliberate:
+a naive `in` domain would have silently locked out every user on a single-property
+install instead.
 
 ## Security groups
 
