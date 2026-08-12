@@ -1,0 +1,19 @@
+Odoo Proprietary License v1.0 (OPL-1)
+
+This module is licensed under the Odoo Proprietary License v1.0 (OPL-1), the
+standard license for paid applications distributed via the Odoo Apps Store.
+
+The complete, authoritative text of this license is published by Odoo S.A. at:
+https://www.odoo.com/documentation/19.0/legal/licenses.html
+
+In summary (the linked text above governs in case of any conflict):
+- You may use this software (execute it, modify it, execute it after modification)
+  only if you have purchased a valid license for it, or have a separate written
+  agreement with the author authorizing use.
+- You may not distribute, sublicense, resell, or publish this software or any
+  modified copy of it.
+- You may develop other Odoo modules that depend on / import this module without
+  copying its source code, and distribute those separate modules under a license
+  of your choice, provided that license is compatible with the terms above.
+
+Copyright (c) Hostel Management. All rights reserved.

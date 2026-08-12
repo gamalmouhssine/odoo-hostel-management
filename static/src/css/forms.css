@@ -1,0 +1,29 @@
+/*
+ * Form-chrome color overrides — action buttons and the statusbar's current-
+ * stage highlight, recolored to the brand terracotta instead of Odoo's
+ * default theme blue/purple. Scoped to `.o_hst_form`, a class added
+ * explicitly on this module's own form views only (never a blanket
+ * `.btn-primary`/`.o_arrow_button_current` override, which would leak into
+ * every other app's forms too — car_rental_pro's included).
+ *
+ * This is what actually makes the brand refresh visible day-to-day: the
+ * Room Kanban board (kanban.css) is one screen, but the Confirm/Check In/
+ * Check Out/Create Invoice buttons and the statusbar appear on every
+ * booking, folio, room, and housekeeping task form.
+ */
+
+.o_hst_form header .btn-primary {
+    background-color: hsl(var(--hst-primary));
+    border-color: hsl(var(--hst-primary));
+}
+
+.o_hst_form header .btn-primary:hover,
+.o_hst_form header .btn-primary:focus {
+    background-color: hsl(var(--hst-primary) / 0.88);
+    border-color: hsl(var(--hst-primary) / 0.88);
+}
+
+.o_hst_form .o_statusbar_status .o_arrow_button.o_arrow_button_current {
+    background-color: hsl(var(--hst-primary));
+    color: hsl(var(--hst-primary-fg));
+}

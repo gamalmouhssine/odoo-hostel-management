@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_property_view_list" model="ir.ui.view">
+        <field name="name">hostel.property.list</field>
+        <field name="model">hostel.property</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="city"/>
+                <field name="room_count"/>
+                <field name="bed_count"/>
+                <field name="today_occupancy_rate" widget="percentage" string="Occupancy Today"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_property_view_form" model="ir.ui.view">
+        <field name="name">hostel.property.form</field>
+        <field name="model">hostel.property</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Downtown Hostel"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="timezone"/>
+                        </group>
+                        <group>
+                            <field name="check_in_time" widget="float_time"/>
+                            <field name="check_out_time" widget="float_time"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Address">
+                        <group>
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="city"/>
+                        </group>
+                        <group>
+                            <field name="state_id"/>
+                            <field name="zip"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                    <group string="Overview">
+                        <field name="room_count"/>
+                        <field name="bed_count"/>
+                        <field name="today_occupancy_rate" widget="percentage"/>
+                    </group>
+                    <notebook>
+                        <page string="Room Types" name="room_types">
+                            <field name="room_type_ids">
+                                <list class="o_hst_list">
+                                    <field name="name"/>
+                                    <field name="sleeping_type_id"/>
+                                    <field name="capacity"/>
+                                    <field name="default_rate" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_property_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">hostel.property</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

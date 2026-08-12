@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sleeping types -->
+    <record id="hostel_sleeping_type_dorm" model="hostel.sleeping.type">
+        <field name="name">Dorm</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_sleeping_type_private_room" model="hostel.sleeping.type">
+        <field name="name">Private Room</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Bed types -->
+    <record id="hostel_bed_type_single" model="hostel.bed.type">
+        <field name="name">Single</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_bed_type_bunk" model="hostel.bed.type">
+        <field name="name">Bunk</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hostel_bed_type_double" model="hostel.bed.type">
+        <field name="name">Double</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="hostel_bed_type_twin" model="hostel.bed.type">
+        <field name="name">Twin</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <!-- Guest ID document types -->
+    <record id="hostel_document_type_passport" model="hostel.document.type">
+        <field name="name">Passport</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_document_type_national_id" model="hostel.document.type">
+        <field name="name">National ID</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Rate plan cancellation policies -->
+    <record id="hostel_cancellation_policy_flexible" model="hostel.cancellation.policy">
+        <field name="name">Flexible</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_cancellation_policy_free_until_x_days" model="hostel.cancellation.policy">
+        <field name="name">Free Cancellation Until X Days Before</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hostel_cancellation_policy_non_refundable" model="hostel.cancellation.policy">
+        <field name="name">Non-refundable</field>
+        <field name="sequence">30</field>
+    </record>
+
+    <!-- Booking sources -->
+    <record id="hostel_booking_source_walk_in" model="hostel.booking.source">
+        <field name="name">Walk-in</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_booking_source_phone" model="hostel.booking.source">
+        <field name="name">Phone</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hostel_booking_source_website" model="hostel.booking.source">
+        <field name="name">Website</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="hostel_booking_source_booking_com" model="hostel.booking.source">
+        <field name="name">Booking.com</field>
+        <field name="is_ota">True</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="hostel_booking_source_hostelworld" model="hostel.booking.source">
+        <field name="name">Hostelworld</field>
+        <field name="is_ota">True</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="hostel_booking_source_other_ota" model="hostel.booking.source">
+        <field name="name">Other OTA</field>
+        <field name="is_ota">True</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="hostel_booking_source_referral" model="hostel.booking.source">
+        <field name="name">Referral</field>
+        <field name="sequence">70</field>
+    </record>
+
+    <!-- Folio charge types -->
+    <record id="hostel_charge_type_stay" model="hostel.charge.type">
+        <field name="name">Stay</field>
+        <field name="is_stay">True</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_charge_type_laundry" model="hostel.charge.type">
+        <field name="name">Laundry</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hostel_charge_type_food" model="hostel.charge.type">
+        <field name="name">Food</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="hostel_charge_type_damage" model="hostel.charge.type">
+        <field name="name">Damage</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="hostel_charge_type_tour" model="hostel.charge.type">
+        <field name="name">Tour</field>
+        <field name="sequence">50</field>
+    </record>
+    <record id="hostel_charge_type_other" model="hostel.charge.type">
+        <field name="name">Other</field>
+        <field name="sequence">60</field>
+    </record>
+
+    <!-- Housekeeping task types -->
+    <record id="hostel_housekeeping_task_type_checkout_clean" model="hostel.housekeeping.task.type">
+        <field name="name">Checkout Clean</field>
+        <field name="is_checkout_clean">True</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="hostel_housekeeping_task_type_daily_service" model="hostel.housekeeping.task.type">
+        <field name="name">Daily Service</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="hostel_housekeeping_task_type_deep_clean" model="hostel.housekeeping.task.type">
+        <field name="name">Deep Clean</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="hostel_housekeeping_task_type_maintenance" model="hostel.housekeeping.task.type">
+        <field name="name">Maintenance</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <!-- Amenities -->
+    <record id="hostel_amenity_wifi" model="hostel.amenity">
+        <field name="name">WiFi</field>
+        <field name="icon">fa-wifi</field>
+    </record>
+    <record id="hostel_amenity_ac" model="hostel.amenity">
+        <field name="name">Air Conditioning</field>
+        <field name="icon">fa-snowflake-o</field>
+    </record>
+    <record id="hostel_amenity_ensuite" model="hostel.amenity">
+        <field name="name">Ensuite Bathroom</field>
+        <field name="icon">fa-bath</field>
+    </record>
+    <record id="hostel_amenity_lockers" model="hostel.amenity">
+        <field name="name">Lockers</field>
+        <field name="icon">fa-lock</field>
+    </record>
+    <record id="hostel_amenity_fan" model="hostel.amenity">
+        <field name="name">Fan</field>
+        <field name="icon">fa-fan</field>
+    </record>
+    <record id="hostel_amenity_balcony" model="hostel.amenity">
+        <field name="name">Balcony</field>
+        <field name="icon">fa-tree</field>
+    </record>
+</odoo>

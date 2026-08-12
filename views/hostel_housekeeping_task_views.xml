@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_housekeeping_task_view_list" model="ir.ui.view">
+        <field name="name">hostel.housekeeping.task.list</field>
+        <field name="model">hostel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="room_id"/>
+                <field name="property_id"/>
+                <field name="date"/>
+                <field name="type_id"/>
+                <field name="assigned_to_id"/>
+                <field name="state" widget="badge" decoration-success="state in ('done', 'verified')"
+                       decoration-warning="state == 'pending'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_housekeeping_task_view_form" model="ir.ui.view">
+        <field name="name">hostel.housekeeping.task.form</field>
+        <field name="model">hostel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <form class="o_hst_form">
+                <header>
+                    <button name="action_start" type="object" string="Start"
+                            class="btn-primary" invisible="state != 'pending'"/>
+                    <button name="action_done" type="object" string="Done"
+                            class="btn-primary" invisible="state not in ('pending', 'in_progress')"/>
+                    <button name="action_verify" type="object" string="Verify"
+                            invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="room_id"/>
+                            <field name="property_id" readonly="1"/>
+                            <field name="type_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="assigned_to_id"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_housekeeping_task_view_search" model="ir.ui.view">
+        <field name="name">hostel.housekeeping.task.search</field>
+        <field name="model">hostel.housekeeping.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="room_id"/>
+                <field name="assigned_to_id"/>
+                <field name="type_id"/>
+                <filter name="filter_open" string="Open" domain="[('state', 'not in', ('done', 'verified'))]"/>
+                <filter name="filter_mine" string="Assigned to Me" domain="[('assigned_to_id', '=', uid)]"/>
+                <group>
+                    <filter name="group_room" string="Room" context="{'group_by': 'room_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_assigned" string="Assigned To" context="{'group_by': 'assigned_to_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hostel_housekeeping_task_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping</field>
+        <field name="res_model">hostel.housekeeping.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_open': 1}</field>
+    </record>
+</odoo>

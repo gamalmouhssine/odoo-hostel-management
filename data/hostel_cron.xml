@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_hostel_checkout_reminders" model="ir.cron">
+            <field name="name">Hostel: Checkout Day Reminders</field>
+            <field name="model_id" ref="model_hostel_booking"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_checkout_reminders()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+        </record>
+
+        <record id="ir_cron_hostel_overstay_reminders" model="ir.cron">
+            <field name="name">Hostel: Overstay Reminders</field>
+            <field name="model_id" ref="model_hostel_booking"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_overstay_reminders()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+        </record>
+
+        <record id="ir_cron_hostel_arrival_reminders" model="ir.cron">
+            <field name="name">Hostel: Arrival Day Reminders</field>
+            <field name="model_id" ref="model_hostel_booking"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_arrival_reminders()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+        </record>
+
+        <record id="ir_cron_hostel_auto_no_show" model="ir.cron">
+            <field name="name">Hostel: Auto No-show Detection</field>
+            <field name="model_id" ref="model_hostel_booking"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_auto_no_show()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hostel_arrivals_departures" model="ir.actions.report">
+        <field name="name">Daily Arrivals &amp; Departures</field>
+        <field name="model">hostel.property</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hostel_management.report_hostel_arrivals_departures</field>
+        <field name="report_file">hostel_management.report_hostel_arrivals_departures</field>
+        <field name="binding_model_id" ref="model_hostel_property"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hostel_arrivals_departures">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <style>
+                        .hst-rep { font-family: Arial, sans-serif; color: #201A17; font-size: 12px; }
+                        .hst-rep .hst-band { background: #C2410C; color: #fff; padding: 16px 20px;
+                            border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+                        .hst-rep .hst-band h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+                        .hst-rep h2 { font-size: 13px; color: #C2410C; border-bottom: 2px solid #115E59;
+                            padding-bottom: 3px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .5px; }
+                        .hst-rep table.hst-lines { width: 100%; border-collapse: collapse; margin-top: 6px; }
+                        .hst-rep table.hst-lines th { background: #FAF6F2; color: #C2410C; text-align: left;
+                            padding: 6px 8px; border-bottom: 2px solid #C2410C; }
+                        .hst-rep table.hst-lines td { padding: 6px 8px; border-bottom: 1px solid #e6e9ee; }
+                        .hst-rep .hst-empty { color: #6b7684; font-style: italic; padding: 8px 0; }
+                    </style>
+                    <div class="hst-rep">
+                        <div class="hst-band">
+                            <h1>DAILY ARRIVALS &amp; DEPARTURES</h1>
+                            <div t-esc="doc.display_name"/>
+                        </div>
+
+                        <h2>Arrivals Today</h2>
+                        <table class="hst-lines" t-if="doc._get_todays_arrivals()">
+                            <thead>
+                                <tr><th>Reference</th><th>Guest</th><th>Room / Bed</th><th>Nights</th><th>Source</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc._get_todays_arrivals()" t-as="booking">
+                                    <td t-esc="booking.name"/>
+                                    <td t-esc="booking.guest_id.display_name"/>
+                                    <td t-esc="booking.room_id.display_name if booking.booking_unit == 'room' else booking.bed_id.display_name"/>
+                                    <td t-esc="booking.nights"/>
+                                    <td t-esc="booking.source_id.name"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="hst-empty" t-if="not doc._get_todays_arrivals()">No arrivals scheduled today.</div>
+
+                        <h2>Departures Today</h2>
+                        <table class="hst-lines" t-if="doc._get_todays_departures()">
+                            <thead>
+                                <tr><th>Reference</th><th>Guest</th><th>Room / Bed</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc._get_todays_departures()" t-as="booking">
+                                    <td t-esc="booking.name"/>
+                                    <td t-esc="booking.guest_id.display_name"/>
+                                    <td t-esc="booking.room_id.display_name if booking.booking_unit == 'room' else booking.bed_id.display_name"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="hst-empty" t-if="not doc._get_todays_departures()">No departures scheduled today.</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

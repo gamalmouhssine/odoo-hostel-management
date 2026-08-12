@@ -1,0 +1,19 @@
+/*
+ * Raw brand hex tokens — Terracotta & Deep Teal (v2, superseding the original
+ * Modern Navy & Amber identity — see CLAUDE.md's Decisions Log for why: navy+amber
+ * read too close to car_rental_pro's own navy+amber, and didn't feel distinct from
+ * a generic "corporate" palette). Warm terracotta is now the dominant/primary
+ * color instead of a secondary accent, paired with a deep teal accent — a
+ * warm-cool pairing common in modern boutique-hospitality branding, and a clean
+ * visual break from the rest of the My_Modules/ suite.
+ * Kept for reference (app icon, and any future PDF report: wkhtmltopdf cannot
+ * render CSS custom properties, so QWeb PDF templates must inline these hex
+ * values literally rather than referencing theme.css's HSL tokens).
+ * All view/kanban/badge styling should use theme.css, not this file directly.
+ */
+:root {
+    --hst-terracotta: #C2410C;
+    --hst-teal: #115E59;
+    --hst-cream: #FAF6F2;
+    --hst-ink: #201A17;
+}

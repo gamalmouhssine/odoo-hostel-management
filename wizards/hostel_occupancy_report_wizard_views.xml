@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_occupancy_report_wizard_view_form" model="ir.ui.view">
+        <field name="name">hostel.occupancy.report.wizard.form</field>
+        <field name="model">hostel.occupancy.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="property_id"/>
+                </group>
+                <footer>
+                    <button name="action_print_report" type="object" string="Print"
+                            class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_occupancy_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Occupancy Report</field>
+        <field name="res_model">hostel.occupancy.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

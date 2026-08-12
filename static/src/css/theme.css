@@ -1,0 +1,74 @@
+/*
+ * Shadcn-style design tokens, namespaced to this module (`--hst-*`) so they
+ * never collide with Odoo's own CSS variables or car_rental_pro's `--crp-*`
+ * set. HSL channel triplets (no `hsl()` wrapper) so alpha works via
+ * `hsl(var(--hst-border) / 0.5)`.
+ *
+ * Brand v2: Terracotta & Deep Teal (see brand.css and CLAUDE.md's Decisions Log
+ * for why this replaced the original Modern Navy & Amber identity).
+ *   --hst-primary = brand terracotta #C2410C (17 88% 40%) — now the dominant
+ *                   color (buttons, focus ring), not a secondary accent.
+ *   --hst-accent  = brand deep teal  #115E59 (176 69% 22%)
+ * Everything else is a warm-neutral shadcn shell built around those two —
+ * background/muted tones lean warm (cream), not the old cool-gray shell.
+ *
+ * Light palette lives on bare :root. Dark palette is best-effort under
+ * prefers-color-scheme — Odoo's backend is light by default and its own dark
+ * toggle is SCSS-compiled server-side, not a runtime class, so this can't be
+ * hooked precisely (same caveat car_rental_pro documents).
+ */
+:root {
+    --hst-bg: 30 45% 98%;
+    --hst-fg: 20 16% 11%;
+    --hst-card: 0 0% 100%;
+    --hst-muted: 30 30% 95%;
+    --hst-muted-fg: 25 10% 42%;
+    --hst-border: 25 18% 87%;
+
+    --hst-primary: 17 88% 40%;
+    --hst-primary-fg: 0 0% 100%;
+
+    --hst-accent: 176 69% 22%;
+    --hst-accent-fg: 0 0% 100%;
+
+    --hst-secondary: 25 15% 46%;
+    --hst-secondary-fg: 0 0% 100%;
+
+    --hst-success: 150 65% 32%;
+    --hst-success-fg: 0 0% 100%;
+
+    --hst-warning: 38 92% 50%;
+    --hst-warning-fg: 38 60% 15%;
+
+    --hst-destructive: 355 75% 48%;
+    --hst-destructive-fg: 0 0% 100%;
+
+    --hst-ring: 17 88% 40%;
+    --hst-radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --hst-bg: 20 18% 9%;
+        --hst-fg: 30 20% 95%;
+        --hst-card: 20 16% 13%;
+        --hst-muted: 20 14% 17%;
+        --hst-muted-fg: 25 10% 65%;
+        --hst-border: 20 14% 23%;
+
+        --hst-primary: 17 85% 58%;
+        --hst-primary-fg: 20 30% 10%;
+
+        --hst-accent: 176 55% 45%;
+        --hst-accent-fg: 176 30% 8%;
+
+        --hst-secondary: 25 12% 62%;
+        --hst-secondary-fg: 20 18% 9%;
+
+        --hst-success: 150 55% 45%;
+        --hst-warning: 38 92% 58%;
+        --hst-destructive: 355 70% 60%;
+
+        --hst-ring: 17 85% 58%;
+    }
+}

@@ -1,0 +1,48 @@
+/*
+ * List-view color treatment, scoped to `.o_hst_list` (added explicitly on
+ * every list view this module owns, including inline sub-lists on forms —
+ * Bookings, Folios, Rooms, Beds, Room Types, Rate Plans, Housekeeping Tasks,
+ * Properties, and every Configuration picklist). Same reasoning as
+ * forms.css: scoped to this module's own views only, never a blanket
+ * override of Odoo's shared list-view chrome.
+ *
+ * NOT covered (and deliberately left as stock Odoo, not an oversight): the
+ * top command bar (breadcrumb, search bar, the "New"/Export/etc. buttons).
+ * That chrome is shared web-client infrastructure rendered outside any
+ * single view's own DOM subtree, so there's no way to reach it from a class
+ * on the list/kanban/form root without a global override — and a global
+ * override would restyle every other app in this Odoo instance
+ * (car_rental_pro, restaurant_pos, Settings, everything), not just this one.
+ */
+
+.o_hst_list .o_list_table > thead {
+    background: hsl(var(--hst-primary) / 0.06);
+}
+
+.o_hst_list .o_list_table > thead > tr > th {
+    color: hsl(var(--hst-primary));
+    font-weight: 700;
+    border-bottom: 2px solid hsl(var(--hst-primary) / 0.25);
+}
+
+.o_hst_list .o_list_table > tbody > tr:hover {
+    background: hsl(var(--hst-accent) / 0.05);
+}
+
+.o_hst_list .o_list_table > tbody > tr.o_data_row.o_selected_row,
+.o_hst_list .o_list_table > tbody > tr.o_data_row:has(.o_list_record_selector input:checked) {
+    background: hsl(var(--hst-primary) / 0.08);
+}
+
+.o_hst_list .o_list_table > tbody > tr > td.o_list_number,
+.o_hst_list .o_list_table > tbody > tr > td:first-of-type {
+    font-weight: 600;
+}
+
+.o_hst_list .o_list_table > tbody > tr > td.o_data_cell:first-of-type {
+    border-left: 2px solid transparent;
+}
+
+.o_hst_list .o_list_table > tbody > tr.o_data_row:hover > td.o_data_cell:first-of-type {
+    border-left: 2px solid hsl(var(--hst-primary));
+}

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- A second property, to demonstrate multi-property support (Phase 3) isn't just a field
+         that exists but unused - its own room type, rate plan, room, and beds, entirely separate
+         from the Downtown Hostel data in phase1_master_data.xml. -->
+    <record id="property_riverside" model="hostel.property">
+        <field name="name">Riverside Hostel</field>
+        <field name="code">RVS</field>
+        <field name="street">42 Riverside Walk</field>
+        <field name="city">Porto</field>
+        <field name="country_id" ref="base.pt"/>
+        <field name="timezone">Europe/Lisbon</field>
+        <field name="check_in_time">15.0</field>
+        <field name="check_out_time">10.5</field>
+    </record>
+
+    <record id="room_type_riverside_twin" model="hostel.room.type">
+        <field name="name">Riverside Twin</field>
+        <field name="code">RVS-TWIN</field>
+        <field name="property_id" ref="property_riverside"/>
+        <field name="sleeping_type_id" ref="hostel_sleeping_type_private_room"/>
+        <field name="bed_type_id" ref="hostel_bed_type_twin"/>
+        <field name="capacity">2</field>
+        <field name="default_rate">55.0</field>
+        <field name="description">Twin room overlooking the river.</field>
+        <field name="amenity_ids" eval="[(6, 0, [ref('hostel_amenity_wifi'), ref('hostel_amenity_ensuite'), ref('hostel_amenity_balcony')])]"/>
+    </record>
+
+    <!-- A rate plan beyond the flat default_rate, showing the richer pricing story: same room
+         type, a cheaper non-refundable option alongside the flexible default. -->
+    <record id="rate_plan_riverside_nonrefundable" model="hostel.rate_plan">
+        <field name="name">Non-refundable</field>
+        <field name="room_type_id" ref="room_type_riverside_twin"/>
+        <field name="price_per_night">45.0</field>
+        <field name="cancellation_policy_id" ref="hostel_cancellation_policy_non_refundable"/>
+        <field name="min_stay_nights">2</field>
+    </record>
+
+    <record id="room_riverside_101" model="hostel.room">
+        <field name="name">R101</field>
+        <field name="floor">1</field>
+        <field name="room_type_id" ref="room_type_riverside_twin"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="room_riverside_102" model="hostel.room">
+        <field name="name">R102</field>
+        <field name="floor">1</field>
+        <field name="room_type_id" ref="room_type_riverside_twin"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="bed_riverside_101_a" model="hostel.bed">
+        <field name="name">R101-A</field>
+        <field name="room_id" ref="room_riverside_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_riverside_102_a" model="hostel.bed">
+        <field name="name">R102-A</field>
+        <field name="room_id" ref="room_riverside_102"/>
+        <field name="status">available</field>
+    </record>
+
+    <!-- A booking using the non-refundable rate plan, on the second property, driven through the
+         real lifecycle so it also gets a folio - demonstrates rate_plan_id actually overriding
+         the room type's flat default_rate (45.0 here, not 55.0) end to end. -->
+    <record id="guest_maria_santos" model="res.partner">
+        <field name="name">Maria Santos</field>
+        <field name="is_hostel_guest">True</field>
+        <field name="nationality_id" ref="base.pt"/>
+        <field name="date_of_birth" eval="'1994-11-08'"/>
+        <field name="id_document_type_id" ref="hostel_document_type_national_id"/>
+        <field name="id_document_number">PT5544332</field>
+        <field name="email">maria.santos@example.com</field>
+        <field name="phone">+351 91 234 5678</field>
+    </record>
+
+    <record id="demo_booking_7" model="hostel.booking">
+        <field name="guest_id" ref="guest_maria_santos"/>
+        <field name="booking_unit">room</field>
+        <field name="room_id" ref="room_riverside_101"/>
+        <field name="rate_plan_id" ref="rate_plan_riverside_nonrefundable"/>
+        <field name="check_in_date" eval="(DateTime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() + relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+        <field name="source_id" ref="hostel_booking_source_website"/>
+    </record>
+    <function model="hostel.booking" name="action_confirm">
+        <value eval="[ref('demo_booking_7')]"/>
+    </function>
+    <function model="hostel.booking" name="action_check_in">
+        <value eval="[ref('demo_booking_7')]"/>
+    </function>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="mail_template_hostel_booking_confirmation" model="mail.template">
+            <field name="name">Hostel: Booking Confirmation</field>
+            <field name="model_id" ref="model_hostel_booking"/>
+            <field name="subject">{{ object.property_id.name }}: Booking Confirmed - {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.guest_id.id }}</field>
+            <!-- use_default_to defaults to True, which would silently ignore partner_to above
+                 and fall back to _message_get_default_recipients() - hostel.booking has no
+                 partner_id field and no override of that method, so the fallback resolves to
+                 nobody. Must be explicit here, unlike core's own sale templates (which rely on
+                 the True default because sale.order does have that resolution built in). -->
+            <field name="use_default_to" eval="False"/>
+            <field name="description">Sent to the guest when their booking is confirmed</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Hello <t t-out="object.guest_id.name or ''">Guest</t>,
+        <br/><br/>
+        Your booking <span style="font-weight: bold;" t-out="object.name or ''">BOOK/2026/00001</span>
+        at <span style="font-weight: bold;" t-out="object.property_id.name or ''">Property</span> is confirmed.
+        <br/><br/>
+        <table style="font-size: 13px;">
+            <tr>
+                <td style="padding: 2px 8px 2px 0; color: #666;">Check-in:</td>
+                <td t-out="object.check_in_date or ''">2026-01-01</td>
+            </tr>
+            <tr>
+                <td style="padding: 2px 8px 2px 0; color: #666;">Check-out:</td>
+                <td t-out="object.check_out_date or ''">2026-01-02</td>
+            </tr>
+            <tr>
+                <td style="padding: 2px 8px 2px 0; color: #666;">Nights:</td>
+                <td t-out="object.nights or 0">1</td>
+            </tr>
+            <tr>
+                <td style="padding: 2px 8px 2px 0; color: #666;">
+                    <t t-if="object.booking_unit == 'bed'">Bed:</t>
+                    <t t-else="">Room:</t>
+                </td>
+                <td t-out="(object.bed_id.display_name if object.booking_unit == 'bed' else object.room_id.display_name) or ''">Room</td>
+            </tr>
+            <tr>
+                <td style="padding: 2px 8px 2px 0; color: #666;">Total:</td>
+                <td t-out="format_amount(object.total_price, object.currency_id) or ''">$0.00</td>
+            </tr>
+        </table>
+        <t t-if="object.deposit_required and not object.deposit_paid">
+            <br/>
+            A deposit of <span style="font-weight: bold;" t-out="format_amount(object.deposit_amount, object.currency_id) or ''">$0.00</span> is required before check-in.
+        </t>
+        <br/><br/>
+        We look forward to welcoming you!
+    </p>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

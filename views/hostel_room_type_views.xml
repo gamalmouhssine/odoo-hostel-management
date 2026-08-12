@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_room_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.room.type.list</field>
+        <field name="model">hostel.room.type</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="property_id"/>
+                <field name="sleeping_type_id"/>
+                <field name="bed_type_id"/>
+                <field name="capacity"/>
+                <field name="default_rate" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_room_type_view_form" model="ir.ui.view">
+        <field name="name">hostel.room.type.form</field>
+        <field name="model">hostel.room.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Dorm-6"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="property_id"/>
+                            <field name="sleeping_type_id"/>
+                            <field name="bed_type_id"/>
+                            <field name="capacity"/>
+                        </group>
+                        <group>
+                            <field name="default_rate" widget="monetary"/>
+                            <field name="default_rate_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Amenities">
+                        <field name="amenity_ids" nolabel="1" widget="many2many_tags"/>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Rate Plans" name="rate_plans">
+                            <field name="rate_plan_ids">
+                                <list editable="bottom" class="o_hst_list">
+                                    <field name="name"/>
+                                    <field name="price_per_night" widget="monetary"/>
+                                    <field name="cancellation_policy_id"/>
+                                    <field name="min_stay_nights"/>
+                                    <field name="max_stay_nights"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Photos" name="photos">
+                            <field name="photo_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_room_type_action" model="ir.actions.act_window">
+        <field name="name">Room Types</field>
+        <field name="res_model">hostel.room.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

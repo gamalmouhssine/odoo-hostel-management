@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_folio_view_list" model="ir.ui.view">
+        <field name="name">hostel.folio.list</field>
+        <field name="model">hostel.folio</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="booking_id"/>
+                <field name="guest_id"/>
+                <field name="property_id"/>
+                <field name="amount_total" widget="monetary"/>
+                <field name="state" widget="badge" decoration-info="state == 'invoiced'"/>
+                <field name="payment_state" widget="badge" decoration-success="payment_state == 'paid'"
+                       decoration-warning="payment_state == 'partial'"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_folio_view_form" model="ir.ui.view">
+        <field name="name">hostel.folio.form</field>
+        <field name="model">hostel.folio</field>
+        <field name="arch" type="xml">
+            <form class="o_hst_form">
+                <header>
+                    <button name="action_create_invoice" type="object" string="Create Invoice"
+                            class="btn-primary" invisible="state != 'open'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button"
+                                icon="fa-usd" invisible="not invoice_id">
+                            <div class="o_stat_info">
+                                <field name="payment_state" class="o_stat_value"/>
+                                <span class="o_stat_text">Invoice</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="booking_id" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="guest_id" readonly="1"/>
+                            <field name="property_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="amount_total" widget="monetary"/>
+                            <field name="payment_state" invisible="not invoice_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'open'">
+                        <list editable="bottom" class="o_hst_list">
+                            <field name="charge_type_id"/>
+                            <field name="product_id"/>
+                            <field name="description"/>
+                            <field name="qty"/>
+                            <field name="unit_price" widget="monetary"/>
+                            <field name="subtotal" widget="monetary"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_folio_action" model="ir.actions.act_window">
+        <field name="name">Folios</field>
+        <field name="res_model">hostel.folio</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

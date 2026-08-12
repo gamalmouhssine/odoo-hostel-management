@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Property scoping for Staff/Housekeeping - Manager is deliberately never listed on any
+         of these rules, so Managers always see every property unrestricted. Domain falls back to
+         unrestricted (empty domain, not "in []") when the user has no properties assigned, so a
+         fresh install or a single-property hostel that never bothers assigning properties isn't
+         silently locked out of its own data - see res_users.py's hostel_property_ids help text
+         and README.md's "Multi-property access" section. -->
+    <record id="hostel_room_rule_property" model="ir.rule">
+        <field name="name">Hostel Room: restrict to assigned properties</field>
+        <field name="model_id" ref="model_hostel_room"/>
+        <field name="domain_force">[('property_id', 'in', user.hostel_property_ids.ids)] if user.hostel_property_ids else []</field>
+        <field name="groups" eval="[(4, ref('group_hostel_staff')), (4, ref('group_hostel_housekeeping'))]"/>
+    </record>
+
+    <record id="hostel_bed_rule_property" model="ir.rule">
+        <field name="name">Hostel Bed: restrict to assigned properties</field>
+        <field name="model_id" ref="model_hostel_bed"/>
+        <field name="domain_force">[('room_id.property_id', 'in', user.hostel_property_ids.ids)] if user.hostel_property_ids else []</field>
+        <field name="groups" eval="[(4, ref('group_hostel_staff')), (4, ref('group_hostel_housekeeping'))]"/>
+    </record>
+
+    <record id="hostel_housekeeping_task_rule_property" model="ir.rule">
+        <field name="name">Hostel Housekeeping Task: restrict to assigned properties</field>
+        <field name="model_id" ref="model_hostel_housekeeping_task"/>
+        <field name="domain_force">[('property_id', 'in', user.hostel_property_ids.ids)] if user.hostel_property_ids else []</field>
+        <field name="groups" eval="[(4, ref('group_hostel_staff')), (4, ref('group_hostel_housekeeping'))]"/>
+    </record>
+
+    <record id="hostel_booking_rule_property" model="ir.rule">
+        <field name="name">Hostel Booking: restrict to assigned properties</field>
+        <field name="model_id" ref="model_hostel_booking"/>
+        <field name="domain_force">[('property_id', 'in', user.hostel_property_ids.ids)] if user.hostel_property_ids else []</field>
+        <field name="groups" eval="[(4, ref('group_hostel_staff'))]"/>
+    </record>
+
+    <record id="hostel_folio_rule_property" model="ir.rule">
+        <field name="name">Hostel Folio: restrict to assigned properties</field>
+        <field name="model_id" ref="model_hostel_folio"/>
+        <field name="domain_force">[('property_id', 'in', user.hostel_property_ids.ids)] if user.hostel_property_ids else []</field>
+        <field name="groups" eval="[(4, ref('group_hostel_staff'))]"/>
+    </record>
+</odoo>

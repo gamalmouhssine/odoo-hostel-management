@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hostel_folio" model="ir.actions.report">
+        <field name="name">Folio</field>
+        <field name="model">hostel.folio</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hostel_management.report_hostel_folio</field>
+        <field name="report_file">hostel_management.report_hostel_folio</field>
+        <field name="binding_model_id" ref="model_hostel_folio"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hostel_folio">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <style>
+                        .hst-rep { font-family: Arial, sans-serif; color: #201A17; font-size: 12px; }
+                        .hst-rep .hst-band { background: #C2410C; color: #fff; padding: 16px 20px;
+                            border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+                        .hst-rep .hst-band h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+                        .hst-rep .hst-band .hst-ref { color: #115E59; font-weight: bold; font-size: 14px; }
+                        .hst-rep h2 { font-size: 13px; color: #C2410C; border-bottom: 2px solid #115E59;
+                            padding-bottom: 3px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .5px; }
+                        .hst-rep table.hst-kv { width: 100%; border-collapse: collapse; }
+                        .hst-rep table.hst-kv td { padding: 3px 6px; vertical-align: top; }
+                        .hst-rep table.hst-kv td.k { color: #6b7684; width: 30%; }
+                        .hst-rep table.hst-lines { width: 100%; border-collapse: collapse; margin-top: 6px; }
+                        .hst-rep table.hst-lines th { background: #FAF6F2; color: #C2410C; text-align: left;
+                            padding: 6px 8px; border-bottom: 2px solid #C2410C; }
+                        .hst-rep table.hst-lines td { padding: 6px 8px; border-bottom: 1px solid #e6e9ee; }
+                        .hst-rep table.hst-lines td.amt, .hst-rep table.hst-lines th.amt { text-align: right; }
+                        .hst-rep .hst-total td { font-weight: bold; color: #C2410C; border-top: 2px solid #C2410C; font-size: 14px; }
+                    </style>
+                    <div class="hst-rep">
+                        <div class="hst-band">
+                            <div>
+                                <h1>FOLIO</h1>
+                                <div t-esc="doc.company_id.name"/>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="hst-ref" t-esc="doc.booking_id.name"/>
+                                <div t-esc="doc.state"/>
+                            </div>
+                        </div>
+
+                        <h2>Guest</h2>
+                        <table class="hst-kv">
+                            <tr><td class="k">Guest</td><td t-esc="doc.guest_id.display_name"/></tr>
+                            <tr><td class="k">Property</td><td t-esc="doc.property_id.display_name"/></tr>
+                            <tr><td class="k">Check-in</td><td><span t-field="doc.booking_id.check_in_date"/></td></tr>
+                            <tr><td class="k">Check-out</td><td><span t-field="doc.booking_id.check_out_date"/></td></tr>
+                        </table>
+
+                        <h2>Charges</h2>
+                        <table class="hst-lines">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="amt">Qty</th>
+                                    <th class="amt">Unit Price</th>
+                                    <th class="amt">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.line_ids" t-as="line">
+                                    <td t-esc="line.description"/>
+                                    <td class="amt" t-esc="line.qty"/>
+                                    <td class="amt"><span t-field="line.unit_price" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                    <td class="amt"><span t-field="line.subtotal" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                </tr>
+                                <tr class="hst-total">
+                                    <td colspan="3" style="text-align:right;">Total</td>
+                                    <td class="amt"><span t-field="doc.amount_total" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

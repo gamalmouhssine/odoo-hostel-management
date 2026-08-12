@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hostel_checkin_registration" model="ir.actions.report">
+        <field name="name">Check-in Registration Card</field>
+        <field name="model">hostel.booking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hostel_management.report_hostel_checkin_registration</field>
+        <field name="report_file">hostel_management.report_hostel_checkin_registration</field>
+        <field name="binding_model_id" ref="model_hostel_booking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hostel_checkin_registration">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <style>
+                        .hst-rep { font-family: Arial, sans-serif; color: #201A17; font-size: 12px; }
+                        .hst-rep .hst-band { background: #C2410C; color: #fff; padding: 16px 20px;
+                            border-radius: 6px; }
+                        .hst-rep .hst-band h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+                        .hst-rep h2 { font-size: 13px; color: #C2410C; border-bottom: 2px solid #115E59;
+                            padding-bottom: 3px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .5px; }
+                        .hst-rep table.hst-kv { width: 100%; border-collapse: collapse; }
+                        .hst-rep table.hst-kv td { padding: 6px; vertical-align: top; border-bottom: 1px solid #e6e9ee; }
+                        .hst-rep table.hst-kv td.k { color: #6b7684; width: 35%; }
+                        .hst-rep .hst-sign { display: flex; gap: 40px; margin-top: 48px; }
+                        .hst-rep .hst-sign .hst-box { flex: 1; }
+                        .hst-rep .hst-sign .hst-line { border-top: 1px solid #C2410C; margin-top: 48px; padding-top: 4px; color: #6b7684; }
+                    </style>
+                    <div class="hst-rep">
+                        <div class="hst-band">
+                            <h1>GUEST REGISTRATION CARD</h1>
+                            <div t-esc="doc.property_id.display_name"/>
+                        </div>
+
+                        <h2>Booking</h2>
+                        <table class="hst-kv">
+                            <tr><td class="k">Reference</td><td t-esc="doc.name"/></tr>
+                            <tr><td class="k">Room / Bed</td>
+                                <td t-esc="doc.room_id.display_name if doc.booking_unit == 'room' else doc.bed_id.display_name"/></tr>
+                            <tr><td class="k">Check-in</td><td><span t-field="doc.check_in_date"/></td></tr>
+                            <tr><td class="k">Check-out</td><td><span t-field="doc.check_out_date"/></td></tr>
+                        </table>
+
+                        <h2>Primary Guest</h2>
+                        <table class="hst-kv">
+                            <tr><td class="k">Full Name</td><td t-esc="doc.guest_id.display_name"/></tr>
+                            <tr><td class="k">Nationality</td><td t-esc="doc.guest_id.nationality_id.name"/></tr>
+                            <tr><td class="k">Date of Birth</td><td><span t-field="doc.guest_id.date_of_birth"/></td></tr>
+                            <tr><td class="k">ID Document Type</td><td t-esc="doc.guest_id.id_document_type_id.name"/></tr>
+                            <tr><td class="k">ID Document Number</td><td t-esc="doc.guest_id.id_document_number"/></tr>
+                            <tr><td class="k">Phone</td><td t-esc="doc.guest_id.phone"/></tr>
+                            <tr><td class="k">Email</td><td t-esc="doc.guest_id.email"/></tr>
+                            <tr><td class="k">Emergency Contact</td>
+                                <td><span t-esc="doc.guest_id.emergency_contact_name"/> — <span t-esc="doc.guest_id.emergency_contact_phone"/></td></tr>
+                        </table>
+
+                        <t t-if="doc.additional_guest_ids">
+                            <h2>Additional Guests</h2>
+                            <table class="hst-kv">
+                                <tr t-foreach="doc.additional_guest_ids" t-as="extra_guest">
+                                    <td class="k" t-esc="extra_guest.display_name"/>
+                                    <td t-esc="extra_guest.nationality_id.name"/>
+                                </tr>
+                            </table>
+                        </t>
+
+                        <div class="hst-sign">
+                            <div class="hst-box">
+                                <div class="hst-line">Guest signature</div>
+                            </div>
+                            <div class="hst-box">
+                                <div class="hst-line">Front desk signature</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

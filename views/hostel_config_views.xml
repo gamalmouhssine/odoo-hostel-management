@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sleeping types -->
+    <record id="hostel_sleeping_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.sleeping.type.list</field>
+        <field name="model">hostel.sleeping.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_sleeping_type_action" model="ir.actions.act_window">
+        <field name="name">Sleeping Types</field>
+        <field name="res_model">hostel.sleeping.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Bed types -->
+    <record id="hostel_bed_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.bed.type.list</field>
+        <field name="model">hostel.bed.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_bed_type_action" model="ir.actions.act_window">
+        <field name="name">Bed Types</field>
+        <field name="res_model">hostel.bed.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Guest ID document types -->
+    <record id="hostel_document_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.document.type.list</field>
+        <field name="model">hostel.document.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_document_type_action" model="ir.actions.act_window">
+        <field name="name">Guest ID Document Types</field>
+        <field name="res_model">hostel.document.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Cancellation policies -->
+    <record id="hostel_cancellation_policy_view_list" model="ir.ui.view">
+        <field name="name">hostel.cancellation.policy.list</field>
+        <field name="model">hostel.cancellation.policy</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_cancellation_policy_action" model="ir.actions.act_window">
+        <field name="name">Cancellation Policies</field>
+        <field name="res_model">hostel.cancellation.policy</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Booking sources -->
+    <record id="hostel_booking_source_view_list" model="ir.ui.view">
+        <field name="name">hostel.booking.source.list</field>
+        <field name="model">hostel.booking.source</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_ota"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_booking_source_action" model="ir.actions.act_window">
+        <field name="name">Booking Sources</field>
+        <field name="res_model">hostel.booking.source</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Folio charge types -->
+    <record id="hostel_charge_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.charge.type.list</field>
+        <field name="model">hostel.charge.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_stay"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_charge_type_action" model="ir.actions.act_window">
+        <field name="name">Charge Types</field>
+        <field name="res_model">hostel.charge.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Housekeeping task types -->
+    <record id="hostel_housekeeping_task_type_view_list" model="ir.ui.view">
+        <field name="name">hostel.housekeeping.task.type.list</field>
+        <field name="model">hostel.housekeeping.task.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_checkout_clean"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_housekeeping_task_type_action" model="ir.actions.act_window">
+        <field name="name">Housekeeping Task Types</field>
+        <field name="res_model">hostel.housekeeping.task.type</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Amenities -->
+    <record id="hostel_amenity_view_list" model="ir.ui.view">
+        <field name="name">hostel.amenity.list</field>
+        <field name="model">hostel.amenity</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="name"/>
+                <field name="icon" placeholder="e.g. fa-wifi"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="hostel_amenity_action" model="ir.actions.act_window">
+        <field name="name">Amenities</field>
+        <field name="res_model">hostel.amenity</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

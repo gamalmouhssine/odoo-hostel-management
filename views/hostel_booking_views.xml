@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_booking_view_list" model="ir.ui.view">
+        <field name="name">hostel.booking.list</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="name"/>
+                <field name="guest_id"/>
+                <field name="property_id"/>
+                <field name="booking_unit"/>
+                <field name="room_id"/>
+                <field name="bed_id"/>
+                <field name="check_in_date"/>
+                <field name="check_out_date"/>
+                <field name="nights"/>
+                <field name="total_price"/>
+                <field name="source_id"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="folio_status" widget="badge"
+                       decoration-danger="folio_status == 'none' and state in ('checked_in', 'checked_out')"
+                       decoration-info="folio_status == 'open'"
+                       decoration-success="folio_status == 'invoiced'"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_booking_view_form" model="ir.ui.view">
+        <field name="name">hostel.booking.form</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <form class="o_hst_form">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_check_in" type="object" string="Check In"
+                            class="btn-primary" invisible="state != 'confirmed'"/>
+                    <button name="action_check_out" type="object" string="Check Out"
+                            class="btn-primary" invisible="state != 'checked_in'"/>
+                    <button name="action_no_show" type="object" string="No-show"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_create_folio" type="object" string="Create Folio"
+                            invisible="state not in ('checked_in', 'checked_out') or folio_count"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('checked_out', 'cancelled', 'no_show')"/>
+                    <button name="action_set_to_draft" type="object" string="Set to Draft"
+                            invisible="state not in ('cancelled', 'no_show')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,checked_in,checked_out"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_folios" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not folio_count">
+                            <field name="folio_count" widget="statinfo" string="Folio"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Guest &amp; Unit">
+                            <field name="guest_id" context="{'default_is_hostel_guest': 1}"/>
+                            <field name="additional_guest_ids" widget="many2many_tags"
+                                   context="{'default_is_hostel_guest': 1}"/>
+                            <field name="num_guests"/>
+                            <field name="booking_unit"/>
+                            <field name="room_id" invisible="booking_unit != 'room'"
+                                   required="booking_unit == 'room'"
+                                   domain="[('state', '=', 'available')] if not id else []"/>
+                            <field name="bed_id" invisible="booking_unit != 'bed'"
+                                   required="booking_unit == 'bed'"
+                                   domain="[('status', '=', 'available')] if not id else []"/>
+                            <field name="property_id" readonly="1"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="check_in_date"/>
+                            <field name="check_out_date"/>
+                            <field name="nights"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pricing">
+                            <field name="rate_plan_id"/>
+                            <field name="rate" widget="monetary"/>
+                            <field name="total_price" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Deposit">
+                            <field name="deposit_required"/>
+                            <field name="deposit_paid" invisible="not deposit_required"/>
+                            <field name="deposit_amount" widget="monetary" invisible="not deposit_required"/>
+                        </group>
+                    </group>
+                    <group string="Source">
+                        <group>
+                            <field name="source_id"/>
+                            <field name="external_ref" invisible="not source_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_booking_view_calendar" model="ir.ui.view">
+        <field name="name">hostel.booking.calendar</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <calendar date_start="check_in_date" date_stop="check_out_date" color="state"
+                      mode="month" quick_create="0">
+                <field name="guest_id"/>
+                <field name="room_id" filters="1"/>
+                <field name="bed_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="hostel_booking_view_search" model="ir.ui.view">
+        <field name="name">hostel.booking.search</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="guest_id"/>
+                <field name="room_id"/>
+                <field name="bed_id"/>
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_confirmed" string="Confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="filter_checked_in" string="Checked In" domain="[('state', '=', 'checked_in')]"/>
+                <filter name="filter_cancelled" string="Cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filter name="filter_no_show" string="No-show" domain="[('state', '=', 'no_show')]"/>
+                <separator/>
+                <filter name="filter_active" string="Active (not cancelled/no-show)" domain="[('state', 'not in', ('cancelled', 'no_show'))]"/>
+                <separator/>
+                <filter name="filter_arrivals_today" string="Arrivals Today"
+                        domain="[('check_in_date', '=', 'today'), ('state', '=', 'confirmed')]"/>
+                <filter name="filter_departures_today" string="Departures Today"
+                        domain="[('check_out_date', '=', 'today'), ('state', '=', 'checked_in')]"/>
+                <filter name="filter_in_house" string="In-House Now" domain="[('state', '=', 'checked_in')]"/>
+                <group>
+                    <filter name="group_property" string="Property" context="{'group_by': 'property_id'}"/>
+                    <filter name="group_room_type" string="Room Type" context="{'group_by': 'room_type_id'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hostel_booking_action" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">hostel.booking</field>
+        <field name="view_mode">list,form,calendar</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+
+    <record id="hostel_booking_view_pivot" model="ir.ui.view">
+        <field name="name">hostel.booking.pivot</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="room_type_id" type="row"/>
+                <field name="check_in_date" interval="month" type="col"/>
+                <field name="nights" type="measure"/>
+                <field name="total_price" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="hostel_booking_view_graph" model="ir.ui.view">
+        <field name="name">hostel.booking.graph</field>
+        <field name="model">hostel.booking</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="room_type_id"/>
+                <field name="total_price" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hostel_booking_action_revenue" model="ir.actions.act_window">
+        <field name="name">Revenue &amp; Occupancy</field>
+        <field name="res_model">hostel.booking</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[('state', 'in', ('checked_in', 'checked_out'))]</field>
+    </record>
+</odoo>

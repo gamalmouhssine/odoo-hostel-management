@@ -1,0 +1,155 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced" style="text-align:center;">
+        <img src="banner.png" class="oe_picture" style="max-width:100%; border-radius:8px;" alt="Hostel Management for Odoo 19"/>
+    </div>
+    <div class="oe_row oe_spaced" style="text-align:center;">
+        <h2 class="oe_slogan" style="color:#C2410C;">Hostel Management</h2>
+        <h3 class="oe_slogan" style="font-weight:normal;">A complete guest-hostel PMS, built only on Odoo Community</h3>
+        <p class="oe_mt32" style="max-width:760px; margin:0 auto; font-size:15px; line-height:1.6;">
+            Multi-property rooms and dorm beds, overlap-safe bookings, itemized folios that invoice
+            through standard Odoo Invoicing, housekeeping tasks, QWeb reports, and a set of live
+            front-desk notifications that catch the things a busy front desk would otherwise miss -
+            a deleted folio, a guest who never checked in, a guest who never checked out. No Enterprise
+            modules, no Studio, no third-party dependency: installs and runs identically on Community.
+        </p>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Multi-property master data, all configurable</h2>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <ul style="line-height:1.8;">
+                <li><b>Properties</b> - address, timezone, check-in/check-out times, per-property occupancy rate</li>
+                <li><b>Room types</b> - private room or dorm, bed type, amenities, photos, a flat default rate</li>
+                <li><b>Rooms &amp; beds</b> - independent occupancy (<code>state</code>) and housekeeping
+                    (<code>housekeeping_status</code>) axes, so a room can be occupied and still dirty at
+                    the same time - the two are never conflated into one field</li>
+                <li><b>Rate plans</b> - price per night, cancellation policy, min/max stay, layered on top of
+                    a room type's flat rate rather than replacing it</li>
+            </ul>
+        </div>
+        <div class="oe_span6">
+            <ul style="line-height:1.8;">
+                <li><b>Amenities, bed types, sleeping types, ID document types, cancellation policies,
+                    booking sources and charge types are all editable configuration models</b> under
+                    Configuration - never a hardcoded picklist you'd need a developer to change</li>
+                <li><b>Guests</b> live on the standard <code>res.partner</code> (with an ID-document scan,
+                    date of birth, and computed stay history) instead of a parallel contact model, so
+                    they show up everywhere Odoo already expects a partner</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Bookings that can't silently double-book a bed</h2>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <p>Book a whole room or a single bed in a shared dorm. A whole-room booking blocks every bed
+            inside that room and vice versa - checked both directions by the same overlap constraint, not
+            two separately-maintained checks that can drift apart.</p>
+            <p>Pricing is <b>locked at booking time</b>: changing a room type's rate later never moves the
+            price of a booking made under the old rate.</p>
+        </div>
+        <div class="oe_span6">
+            <p>Full stay lifecycle: <code>draft &rarr; confirmed &rarr; checked_in &rarr; checked_out</code>,
+            with cancel and no-show side branches. Check-in correctly cascades room/bed occupancy status,
+            including partial-occupancy dorms (a room only reads "occupied" once every bed in it is).</p>
+            <p>Deposits, OTA source/reference tracking, and additional-guest lists round out the booking
+            form for real-world front-desk use.</p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Mechanisms, not just menus</h2>
+        <h3 class="oe_slogan" style="font-weight:normal;">The part that usually gets left for "later" - already built in</h3>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <ul style="line-height:1.9;">
+                <li><b>Live popup notifications</b> for arrivals today, checkouts today, and overstays
+                    (a guest still checked in after their checkout date) - reaches anyone with Odoo open,
+                    on top of the standard chatter/activity reminders</li>
+                <li><b>Automatic no-show detection</b> - a confirmed booking nobody checked in by the end
+                    of its check-in date is flagged automatically, freeing the room instead of leaving it
+                    silently blocked</li>
+                <li><b>Deposit enforcement</b> - check-in is blocked if a deposit was required and never
+                    marked paid</li>
+                <li><b>Booking confirmation emails</b> sent to the guest automatically on confirmation</li>
+            </ul>
+        </div>
+        <div class="oe_span6">
+            <ul style="line-height:1.9;">
+                <li><b>Housekeeping assignment popups</b> - the moment a cleaning task lands on someone,
+                    they know, without checking a list</li>
+                <li><b>Folio/invoice integrity</b> - cancel or delete an invoice and its folio reopens
+                    automatically for re-billing, lines untouched</li>
+                <li><b>Deletion guards</b> - rooms and beds with real booking history can't be deleted out
+                    from under a booking (archiving is offered instead), and a deleted folio doesn't strand
+                    its booking - a one-click "Create Folio" recovers it</li>
+                <li><b>Migration scripts</b> included, so upgrading an existing install carries old data
+                    forward cleanly instead of leaving stale values behind</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Folios, billing, and housekeeping</h2>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <p><b>Folios</b> open automatically at check-in with a pre-filled stay line, priced off the
+            booking's already-locked rate. Add charges any time - laundry, food, damage, tours, whatever
+            the property needs - then invoice with one click through <b>standard Odoo Invoicing</b>. No
+            custom tax or currency handling: it's a real <code>account.move</code>, so everything downstream
+            (payments, accounting, reporting) just works.</p>
+        </div>
+        <div class="oe_span6">
+            <p><b>Housekeeping tasks</b> are created automatically on checkout and tracked through
+            pending &rarr; in progress &rarr; done &rarr; verified, with a one-click "Mark Clean" shortcut
+            for the front desk that completes the matching task behind the scenes rather than being a
+            second, disconnected system.</p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <h2 class="oe_slogan">Reports, dashboards, and security</h2>
+    </div>
+    <div class="oe_row oe_spaced">
+        <div class="oe_span6">
+            <p><b>QWeb PDF reports:</b> booking confirmation, check-in registration card, folio, daily
+            arrivals &amp; departures, and an occupancy/ADR summary - plus revenue and occupancy pivot and
+            graph views, and a status-colored Room Kanban board with front-desk saved filters (arrivals
+            today, departures today, in-house now).</p>
+        </div>
+        <div class="oe_span6">
+            <p><b>Property-scoped security:</b> Staff and Housekeeping roles only see the properties
+            assigned to them (unrestricted if none are assigned, rather than locked out); Managers see
+            everything. Guest ID-document fields are field-level restricted to Staff/Manager only.
+            A separate Housekeeping role sees rooms, beds and tasks - nothing else.</p>
+        </div>
+    </div>
+</section>
+
+<section class="oe_container">
+    <div class="oe_row oe_spaced" style="text-align:center;">
+        <h2 class="oe_slogan">Built and tested against a real Odoo 19 instance</h2>
+        <p class="oe_mt32" style="max-width:700px; margin:0 auto;">
+            Every mechanism described above is covered by an automated test that exercises the real
+            behavior - not just written and assumed correct. No Gantt view, no Studio dependency, no
+            Documents app dependency, no POS or portal integration: deliberately scoped to what a
+            standalone hostel front desk actually needs.
+        </p>
+    </div>
+</section>

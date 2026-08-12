@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_hostel_management" model="ir.module.category">
+        <field name="name">Hostel Management</field>
+        <field name="sequence">21</field>
+    </record>
+
+    <!-- Two independent privileges (each renders as its own selection in the Users access
+         rights form) under the same category: front-desk level (Staff/Manager, a hierarchy -
+         mutually exclusive makes sense here) and housekeeping (a separate, orthogonal track a
+         user can hold with or without a front-desk role - e.g. a small hostel where the same
+         person does both, without being a full Manager). Sharing one privilege across all three
+         would make them mutually exclusive in the UI, which is wrong for housekeeping. -->
+    <record id="res_groups_privilege_hostel_management" model="res.groups.privilege">
+        <field name="name">Hostel Management</field>
+        <field name="category_id" ref="module_category_hostel_management"/>
+    </record>
+
+    <record id="res_groups_privilege_hostel_housekeeping" model="res.groups.privilege">
+        <field name="name">Hostel Housekeeping</field>
+        <field name="category_id" ref="module_category_hostel_management"/>
+    </record>
+
+    <record id="group_hostel_staff" model="res.groups">
+        <field name="name">Hostel Staff</field>
+        <field name="privilege_id" ref="res_groups_privilege_hostel_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_hostel_housekeeping" model="res.groups">
+        <field name="name">Hostel Housekeeping</field>
+        <field name="privilege_id" ref="res_groups_privilege_hostel_housekeeping"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_hostel_manager" model="res.groups">
+        <field name="name">Hostel Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_hostel_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_hostel_staff')), (4, ref('group_hostel_housekeeping'))]"/>
+    </record>
+</odoo>

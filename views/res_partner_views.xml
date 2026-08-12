@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_hostel_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.hostel.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_hostel_bookings" type="object" class="oe_stat_button"
+                        icon="fa-bed" invisible="not is_hostel_guest">
+                    <field name="stay_count" widget="statinfo" string="Stays"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Hostel Guest" name="hostel_guest">
+                    <group>
+                        <group string="Guest">
+                            <field name="is_hostel_guest"/>
+                            <field name="nationality_id"/>
+                            <field name="date_of_birth" groups="hostel_management.group_hostel_staff"/>
+                        </group>
+                        <group string="Identity Document" groups="hostel_management.group_hostel_staff">
+                            <field name="id_document_type_id"/>
+                            <field name="id_document_number"/>
+                            <field name="id_document" filename="id_document_filename"/>
+                            <field name="id_document_filename" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Emergency Contact">
+                        <field name="emergency_contact_name"/>
+                        <field name="emergency_contact_phone"/>
+                    </group>
+                    <group string="Stay History">
+                        <field name="stay_count"/>
+                        <field name="total_nights"/>
+                        <field name="total_spend" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hostel_guest_action" model="ir.actions.act_window">
+        <field name="name">Guests</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_hostel_guest', '=', True)]</field>
+        <field name="context">{'default_is_hostel_guest': True}</field>
+    </record>
+</odoo>

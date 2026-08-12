@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_hostel_management_root" name="Hostel" sequence="10"
+              groups="hostel_management.group_hostel_staff,hostel_management.group_hostel_housekeeping"
+              web_icon="hostel_management,static/description/icon.png"/>
+
+    <menuitem id="menu_hostel_bookings" name="Bookings" parent="menu_hostel_management_root"
+              action="hostel_booking_action" groups="hostel_management.group_hostel_staff" sequence="10"/>
+
+    <menuitem id="menu_hostel_folios" name="Folios" parent="menu_hostel_management_root"
+              action="hostel_folio_action" groups="hostel_management.group_hostel_staff" sequence="15"/>
+
+    <!-- Visible to the whole app (staff/manager/housekeeping) - unlike Bookings/Folios/Guests,
+         housekeeping is exactly the group this menu exists for. -->
+    <menuitem id="menu_hostel_housekeeping" name="Housekeeping" parent="menu_hostel_management_root"
+              action="hostel_housekeeping_task_action" sequence="18"/>
+
+    <menuitem id="menu_hostel_reports" name="Reports" parent="menu_hostel_management_root"
+              groups="hostel_management.group_hostel_staff" sequence="90"/>
+    <menuitem id="menu_hostel_reports_occupancy" name="Occupancy Report" parent="menu_hostel_reports"
+              action="hostel_occupancy_report_wizard_action" sequence="10"/>
+    <menuitem id="menu_hostel_reports_revenue" name="Revenue &amp; Occupancy" parent="menu_hostel_reports"
+              action="hostel_booking_action_revenue" sequence="20"/>
+
+    <menuitem id="menu_hostel_guests" name="Guests" parent="menu_hostel_management_root"
+              action="hostel_guest_action" groups="hostel_management.group_hostel_staff" sequence="20"/>
+
+    <menuitem id="menu_hostel_configuration" name="Configuration" parent="menu_hostel_management_root"
+              groups="hostel_management.group_hostel_staff" sequence="100"/>
+    <menuitem id="menu_hostel_configuration_properties" name="Properties" parent="menu_hostel_configuration"
+              action="hostel_property_action" sequence="5"/>
+    <menuitem id="menu_hostel_configuration_room_types" name="Room Types" parent="menu_hostel_configuration"
+              action="hostel_room_type_action" sequence="10"/>
+    <menuitem id="menu_hostel_configuration_rate_plans" name="Rate Plans" parent="menu_hostel_configuration"
+              action="hostel_rate_plan_action" sequence="15"/>
+    <menuitem id="menu_hostel_configuration_rooms" name="Rooms" parent="menu_hostel_configuration"
+              action="hostel_room_action" sequence="20"/>
+    <menuitem id="menu_hostel_configuration_beds" name="Beds" parent="menu_hostel_configuration"
+              action="hostel_bed_action" sequence="30"/>
+
+    <menuitem id="menu_hostel_configuration_lists" name="Config Lists" parent="menu_hostel_configuration"
+              groups="hostel_management.group_hostel_manager" sequence="200"/>
+    <menuitem id="menu_hostel_configuration_amenities" name="Amenities" parent="menu_hostel_configuration_lists"
+              action="hostel_amenity_action" sequence="10"/>
+    <menuitem id="menu_hostel_configuration_sleeping_types" name="Sleeping Types" parent="menu_hostel_configuration_lists"
+              action="hostel_sleeping_type_action" sequence="20"/>
+    <menuitem id="menu_hostel_configuration_bed_types" name="Bed Types" parent="menu_hostel_configuration_lists"
+              action="hostel_bed_type_action" sequence="30"/>
+    <menuitem id="menu_hostel_configuration_document_types" name="Guest ID Document Types" parent="menu_hostel_configuration_lists"
+              action="hostel_document_type_action" sequence="40"/>
+    <menuitem id="menu_hostel_configuration_cancellation_policies" name="Cancellation Policies" parent="menu_hostel_configuration_lists"
+              action="hostel_cancellation_policy_action" sequence="50"/>
+    <menuitem id="menu_hostel_configuration_booking_sources" name="Booking Sources" parent="menu_hostel_configuration_lists"
+              action="hostel_booking_source_action" sequence="60"/>
+    <menuitem id="menu_hostel_configuration_charge_types" name="Charge Types" parent="menu_hostel_configuration_lists"
+              action="hostel_charge_type_action" sequence="70"/>
+    <menuitem id="menu_hostel_configuration_housekeeping_task_types" name="Housekeeping Task Types" parent="menu_hostel_configuration_lists"
+              action="hostel_housekeeping_task_type_action" sequence="80"/>
+</odoo>

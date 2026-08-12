@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_bed_view_list" model="ir.ui.view">
+        <field name="name">hostel.bed.list</field>
+        <field name="model">hostel.bed</field>
+        <field name="arch" type="xml">
+            <list class="o_hst_list">
+                <field name="name"/>
+                <field name="room_id"/>
+                <field name="status"/>
+                <field name="is_female_only"/>
+                <field name="is_bottom_bunk"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_bed_view_form" model="ir.ui.view">
+        <field name="name">hostel.bed.form</field>
+        <field name="model">hostel.bed</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. 102-A"/></h1>
+                    </div>
+                    <group>
+                        <field name="room_id"/>
+                        <field name="status"/>
+                        <field name="is_female_only"/>
+                        <field name="is_bottom_bunk"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_bed_view_search" model="ir.ui.view">
+        <field name="name">hostel.bed.search</field>
+        <field name="model">hostel.bed</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="room_id"/>
+                <filter string="Available" name="filter_available" domain="[('status', '=', 'available')]"/>
+                <filter string="Booked" name="filter_booked" domain="[('status', '=', 'booked')]"/>
+                <filter string="Occupied" name="filter_occupied" domain="[('status', '=', 'occupied')]"/>
+                <filter string="Maintenance" name="filter_maintenance" domain="[('status', '=', 'maintenance')]"/>
+                <group>
+                    <filter string="Room" name="group_room" context="{'group_by': 'room_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hostel_bed_action" model="ir.actions.act_window">
+        <field name="name">Beds</field>
+        <field name="res_model">hostel.bed</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

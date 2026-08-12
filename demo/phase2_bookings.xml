@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Checked in: created in draft and driven through the REAL action_confirm/action_check_in
+         methods below (not a direct state="checked_in" field-set) so the check-in side effects
+         (bed status cascade, folio auto-creation with its stay line) actually happen - a direct
+         field-set would leave this demo booking with no folio at all, same gap the module had
+         before Phase 10. Explains why bed 101-A ends up occupied (see phase1_master_data.xml,
+         which now seeds this bed as `available` precisely so this lifecycle can run on it). -->
+    <record id="demo_booking_1" model="hostel.booking">
+        <field name="guest_id" ref="guest_sara_ivanova"/>
+        <field name="booking_unit">bed</field>
+        <field name="bed_id" ref="bed_101_a"/>
+        <field name="check_in_date" eval="(DateTime.now() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() + relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+        <field name="source_id" ref="hostel_booking_source_website"/>
+    </record>
+
+    <!-- Checked out: same reasoning - driven through the real lifecycle including
+         action_check_out so it ends up with a folio (with its auto-generated stay line) AND the
+         checkout_clean housekeeping task that action really creates. Explains why room 103
+         (Private) ends up dirty. Add an extra charge line by hand in the UI (Folios > this
+         folio) to see that part of the feature - not worth hand-computing in demo XML. -->
+    <record id="demo_booking_2" model="hostel.booking">
+        <field name="guest_id" ref="guest_karim_haddad"/>
+        <field name="booking_unit">room</field>
+        <field name="room_id" ref="room_103"/>
+        <field name="check_in_date" eval="(DateTime.now() - relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+        <field name="source_id" ref="hostel_booking_source_walk_in"/>
+    </record>
+
+    <function model="hostel.booking" name="action_confirm">
+        <value eval="[ref('demo_booking_1'), ref('demo_booking_2')]"/>
+    </function>
+    <function model="hostel.booking" name="action_check_in">
+        <value eval="[ref('demo_booking_1'), ref('demo_booking_2')]"/>
+    </function>
+    <function model="hostel.booking" name="action_check_out">
+        <value eval="[ref('demo_booking_2')]"/>
+    </function>
+
+    <!-- Confirmed: upcoming stay in the Deluxe room, booked via an OTA -->
+    <record id="demo_booking_3" model="hostel.booking">
+        <field name="guest_id" ref="guest_yuki_tanaka"/>
+        <field name="booking_unit">room</field>
+        <field name="room_id" ref="room_201"/>
+        <field name="check_in_date" eval="(DateTime.now() + relativedelta(days=6)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+        <field name="state">confirmed</field>
+        <field name="source_id" ref="hostel_booking_source_hostelworld"/>
+        <field name="external_ref">HW-774512</field>
+    </record>
+
+    <!-- Draft: not yet confirmed, single dorm bed -->
+    <record id="demo_booking_4" model="hostel.booking">
+        <field name="guest_id" ref="guest_alex_morgan"/>
+        <field name="booking_unit">bed</field>
+        <field name="bed_id" ref="bed_203_a"/>
+        <field name="check_in_date" eval="(DateTime.now() + relativedelta(days=14)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() + relativedelta(days=17)).strftime('%Y-%m-%d')"/>
+        <field name="state">draft</field>
+        <field name="source_id" ref="hostel_booking_source_referral"/>
+    </record>
+
+    <!-- Cancelled: kept to show a cancelled booking never blocks the calendar/overlap check -->
+    <record id="demo_booking_5" model="hostel.booking">
+        <field name="guest_id" ref="guest_alex_morgan"/>
+        <field name="booking_unit">bed</field>
+        <field name="bed_id" ref="bed_203_b"/>
+        <field name="check_in_date" eval="(DateTime.now() + relativedelta(days=14)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="(DateTime.now() + relativedelta(days=17)).strftime('%Y-%m-%d')"/>
+        <field name="state">cancelled</field>
+        <field name="source_id" ref="hostel_booking_source_phone"/>
+    </record>
+
+    <!-- No-show: driven through the real action_confirm/action_no_show pair below, so it
+         actually exercises the bed hold-and-release cycle (available -> booked -> available)
+         rather than just a cosmetic state label - demonstrates a no-show never permanently
+         blocks the bed for a later guest. -->
+    <record id="demo_booking_6" model="hostel.booking">
+        <field name="guest_id" ref="guest_alex_morgan"/>
+        <field name="booking_unit">bed</field>
+        <field name="bed_id" ref="bed_203_c"/>
+        <field name="check_in_date" eval="(DateTime.now() - relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+        <field name="check_out_date" eval="DateTime.now().strftime('%Y-%m-%d')"/>
+        <field name="source_id" ref="hostel_booking_source_booking_com"/>
+        <field name="external_ref">BDC-99231</field>
+    </record>
+    <function model="hostel.booking" name="action_confirm">
+        <value eval="[ref('demo_booking_6')]"/>
+    </function>
+    <function model="hostel.booking" name="action_no_show">
+        <value eval="[ref('demo_booking_6')]"/>
+    </function>
+
+</odoo>

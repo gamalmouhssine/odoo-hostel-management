@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Property -->
+    <record id="property_downtown" model="hostel.property">
+        <field name="name">Downtown Hostel</field>
+        <field name="code">DTH</field>
+        <field name="street">1 Backpacker Lane</field>
+        <field name="city">Lisbon</field>
+        <field name="country_id" ref="base.pt"/>
+        <field name="timezone">Europe/Lisbon</field>
+        <field name="check_in_time">14.0</field>
+        <field name="check_out_time">11.0</field>
+    </record>
+
+    <!-- Room types -->
+    <record id="room_type_dorm6" model="hostel.room.type">
+        <field name="name">Dorm-6</field>
+        <field name="code">DORM6</field>
+        <field name="property_id" ref="property_downtown"/>
+        <field name="sleeping_type_id" ref="hostel_sleeping_type_dorm"/>
+        <field name="bed_type_id" ref="hostel_bed_type_bunk"/>
+        <field name="capacity">6</field>
+        <field name="default_rate">15.0</field>
+        <field name="description">Six-bed mixed dormitory.</field>
+        <field name="amenity_ids" eval="[(6, 0, [ref('hostel_amenity_wifi'), ref('hostel_amenity_lockers'), ref('hostel_amenity_fan')])]"/>
+    </record>
+
+    <record id="room_type_dorm8" model="hostel.room.type">
+        <field name="name">Dorm-8</field>
+        <field name="code">DORM8</field>
+        <field name="property_id" ref="property_downtown"/>
+        <field name="sleeping_type_id" ref="hostel_sleeping_type_dorm"/>
+        <field name="bed_type_id" ref="hostel_bed_type_bunk"/>
+        <field name="capacity">8</field>
+        <field name="default_rate">12.0</field>
+        <field name="description">Eight-bed mixed dormitory.</field>
+        <field name="amenity_ids" eval="[(6, 0, [ref('hostel_amenity_wifi'), ref('hostel_amenity_lockers')])]"/>
+    </record>
+
+    <record id="room_type_private" model="hostel.room.type">
+        <field name="name">Private</field>
+        <field name="code">PRIV</field>
+        <field name="property_id" ref="property_downtown"/>
+        <field name="sleeping_type_id" ref="hostel_sleeping_type_private_room"/>
+        <field name="bed_type_id" ref="hostel_bed_type_double"/>
+        <field name="capacity">1</field>
+        <field name="default_rate">45.0</field>
+        <field name="description">Single private room with its own bed.</field>
+        <field name="amenity_ids" eval="[(6, 0, [ref('hostel_amenity_wifi'), ref('hostel_amenity_ensuite')])]"/>
+    </record>
+
+    <record id="room_type_deluxe" model="hostel.room.type">
+        <field name="name">Deluxe</field>
+        <field name="code">DLX</field>
+        <field name="property_id" ref="property_downtown"/>
+        <field name="sleeping_type_id" ref="hostel_sleeping_type_private_room"/>
+        <field name="bed_type_id" ref="hostel_bed_type_twin"/>
+        <field name="capacity">2</field>
+        <field name="default_rate">70.0</field>
+        <field name="description">Private double room with upgraded amenities.</field>
+        <field name="amenity_ids" eval="[(6, 0, [ref('hostel_amenity_wifi'), ref('hostel_amenity_ensuite'), ref('hostel_amenity_ac'), ref('hostel_amenity_balcony')])]"/>
+    </record>
+
+    <!-- Rooms: state (occupancy axis) and housekeeping_status (cleanliness axis) are now
+         independent - e.g. room 102 is occupied AND needs cleaning attention at the same time,
+         which the old single `status` field couldn't represent. -->
+    <record id="room_101" model="hostel.room">
+        <field name="name">101</field>
+        <field name="floor">1</field>
+        <field name="room_type_id" ref="room_type_dorm6"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="room_102" model="hostel.room">
+        <field name="name">102</field>
+        <field name="floor">1</field>
+        <field name="room_type_id" ref="room_type_dorm8"/>
+        <field name="state">occupied</field>
+        <field name="housekeeping_status">dirty</field>
+    </record>
+
+    <record id="room_103" model="hostel.room">
+        <field name="name">103</field>
+        <field name="floor">1</field>
+        <field name="room_type_id" ref="room_type_private"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="room_201" model="hostel.room">
+        <field name="name">201</field>
+        <field name="floor">2</field>
+        <field name="room_type_id" ref="room_type_deluxe"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="room_202" model="hostel.room">
+        <field name="name">202</field>
+        <field name="floor">2</field>
+        <field name="room_type_id" ref="room_type_private"/>
+        <field name="state">maintenance</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <record id="room_203" model="hostel.room">
+        <field name="name">203</field>
+        <field name="floor">2</field>
+        <field name="room_type_id" ref="room_type_dorm6"/>
+        <field name="state">available</field>
+        <field name="housekeeping_status">clean</field>
+    </record>
+
+    <!-- Beds: room 101 (Dorm-6), mostly available with one occupied -->
+    <record id="bed_101_a" model="hostel.bed">
+        <field name="name">101-A</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_101_b" model="hostel.bed">
+        <field name="name">101-B</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_101_c" model="hostel.bed">
+        <field name="name">101-C</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_101_d" model="hostel.bed">
+        <field name="name">101-D</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_101_e" model="hostel.bed">
+        <field name="name">101-E</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_101_f" model="hostel.bed">
+        <field name="name">101-F</field>
+        <field name="room_id" ref="room_101"/>
+        <field name="status">available</field>
+    </record>
+
+    <!-- Beds: room 102 (Dorm-8), the room itself is "occupied" so most beds are taken. Bed-level
+         `dirty` no longer exists (housekeeping is tracked on the room, see room_102's
+         housekeeping_status above) - a vacated bed is just `available` again. -->
+    <record id="bed_102_a" model="hostel.bed">
+        <field name="name">102-A</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">occupied</field>
+    </record>
+    <record id="bed_102_b" model="hostel.bed">
+        <field name="name">102-B</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">occupied</field>
+    </record>
+    <record id="bed_102_c" model="hostel.bed">
+        <field name="name">102-C</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">occupied</field>
+    </record>
+    <record id="bed_102_d" model="hostel.bed">
+        <field name="name">102-D</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">occupied</field>
+    </record>
+    <record id="bed_102_e" model="hostel.bed">
+        <field name="name">102-E</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">occupied</field>
+    </record>
+    <record id="bed_102_f" model="hostel.bed">
+        <field name="name">102-F</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_102_g" model="hostel.bed">
+        <field name="name">102-G</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">available</field>
+        <field name="is_female_only">True</field>
+    </record>
+    <record id="bed_102_h" model="hostel.bed">
+        <field name="name">102-H</field>
+        <field name="room_id" ref="room_102"/>
+        <field name="status">available</field>
+        <field name="is_female_only">True</field>
+    </record>
+
+    <!-- Beds: single-occupancy rooms still carry their own bed record -->
+    <record id="bed_103_a" model="hostel.bed">
+        <field name="name">103-A</field>
+        <field name="room_id" ref="room_103"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_201_a" model="hostel.bed">
+        <field name="name">201-A</field>
+        <field name="room_id" ref="room_201"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_202_a" model="hostel.bed">
+        <field name="name">202-A</field>
+        <field name="room_id" ref="room_202"/>
+        <field name="status">maintenance</field>
+    </record>
+
+    <!-- Beds: room 203 (Dorm-6), all free -->
+    <record id="bed_203_a" model="hostel.bed">
+        <field name="name">203-A</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_203_b" model="hostel.bed">
+        <field name="name">203-B</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_203_c" model="hostel.bed">
+        <field name="name">203-C</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_203_d" model="hostel.bed">
+        <field name="name">203-D</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_203_e" model="hostel.bed">
+        <field name="name">203-E</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+    <record id="bed_203_f" model="hostel.bed">
+        <field name="name">203-F</field>
+        <field name="room_id" ref="room_203"/>
+        <field name="status">available</field>
+    </record>
+
+    <!-- Guests -->
+    <record id="guest_alex_morgan" model="res.partner">
+        <field name="name">Alex Morgan</field>
+        <field name="is_hostel_guest">True</field>
+        <field name="nationality_id" ref="base.us"/>
+        <field name="date_of_birth" eval="'1996-04-12'"/>
+        <field name="id_document_type_id" ref="hostel_document_type_passport"/>
+        <field name="id_document_number">US1234567</field>
+        <field name="email">alex.morgan@example.com</field>
+        <field name="phone">+1 555 0100</field>
+    </record>
+
+    <record id="guest_sara_ivanova" model="res.partner">
+        <field name="name">Sara Ivanova</field>
+        <field name="is_hostel_guest">True</field>
+        <field name="nationality_id" ref="base.bg"/>
+        <field name="date_of_birth" eval="'1999-09-03'"/>
+        <field name="id_document_type_id" ref="hostel_document_type_passport"/>
+        <field name="id_document_number">BG7654321</field>
+        <field name="email">sara.ivanova@example.com</field>
+        <field name="phone">+359 88 000 1111</field>
+        <field name="emergency_contact_name">Elena Ivanova</field>
+        <field name="emergency_contact_phone">+359 88 000 2222</field>
+    </record>
+
+    <record id="guest_karim_haddad" model="res.partner">
+        <field name="name">Karim Haddad</field>
+        <field name="is_hostel_guest">True</field>
+        <field name="nationality_id" ref="base.ma"/>
+        <field name="date_of_birth" eval="'1990-01-22'"/>
+        <field name="id_document_type_id" ref="hostel_document_type_national_id"/>
+        <field name="id_document_number">MA998877</field>
+        <field name="email">karim.haddad@example.com</field>
+        <field name="phone">+212 6 00 11 22 33</field>
+    </record>
+
+    <record id="guest_yuki_tanaka" model="res.partner">
+        <field name="name">Yuki Tanaka</field>
+        <field name="is_hostel_guest">True</field>
+        <field name="nationality_id" ref="base.jp"/>
+        <field name="date_of_birth" eval="'2001-07-30'"/>
+        <field name="id_document_type_id" ref="hostel_document_type_passport"/>
+        <!-- deliberately missing id_document_number: exercises validation added in a later phase -->
+        <field name="email">yuki.tanaka@example.com</field>
+    </record>
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hostel_booking_confirmation" model="ir.actions.report">
+        <field name="name">Booking Confirmation</field>
+        <field name="model">hostel.booking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hostel_management.report_hostel_booking_confirmation</field>
+        <field name="report_file">hostel_management.report_hostel_booking_confirmation</field>
+        <field name="binding_model_id" ref="model_hostel_booking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_hostel_booking_confirmation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page">
+                    <style>
+                        .hst-rep { font-family: Arial, sans-serif; color: #201A17; font-size: 12px; }
+                        .hst-rep .hst-band { background: #C2410C; color: #fff; padding: 16px 20px;
+                            border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+                        .hst-rep .hst-band h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+                        .hst-rep .hst-band .hst-ref { color: #115E59; font-weight: bold; font-size: 14px; }
+                        .hst-rep h2 { font-size: 13px; color: #C2410C; border-bottom: 2px solid #115E59;
+                            padding-bottom: 3px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .5px; }
+                        .hst-rep table.hst-kv { width: 100%; border-collapse: collapse; }
+                        .hst-rep table.hst-kv td { padding: 3px 6px; vertical-align: top; }
+                        .hst-rep table.hst-kv td.k { color: #6b7684; width: 35%; }
+                        .hst-rep .hst-cols { display: flex; gap: 24px; }
+                        .hst-rep .hst-col { flex: 1; }
+                        .hst-rep .hst-note { margin-top: 16px; padding: 10px 14px; background: #FAF6F2;
+                            border-left: 3px solid #115E59; }
+                    </style>
+                    <div class="hst-rep">
+                        <div class="hst-band">
+                            <div>
+                                <h1>BOOKING CONFIRMATION</h1>
+                                <div t-esc="doc.property_id.display_name"/>
+                            </div>
+                            <div style="text-align:right;">
+                                <div class="hst-ref" t-esc="doc.name"/>
+                                <div><span t-field="doc.state"/></div>
+                            </div>
+                        </div>
+
+                        <div class="hst-cols">
+                            <div class="hst-col">
+                                <h2>Guest</h2>
+                                <table class="hst-kv">
+                                    <tr><td class="k">Name</td><td t-esc="doc.guest_id.display_name"/></tr>
+                                    <tr t-if="doc.guest_id.email"><td class="k">Email</td><td t-esc="doc.guest_id.email"/></tr>
+                                    <tr t-if="doc.guest_id.phone"><td class="k">Phone</td><td t-esc="doc.guest_id.phone"/></tr>
+                                    <tr t-if="doc.num_guests"><td class="k">Guests</td><td t-esc="doc.num_guests"/></tr>
+                                </table>
+                            </div>
+                            <div class="hst-col">
+                                <h2>Stay</h2>
+                                <table class="hst-kv">
+                                    <tr><td class="k">Room / Bed</td>
+                                        <td t-esc="doc.room_id.display_name if doc.booking_unit == 'room' else doc.bed_id.display_name"/></tr>
+                                    <tr><td class="k">Room Type</td><td t-esc="doc.room_type_id.display_name"/></tr>
+                                    <tr><td class="k">Check-in</td><td><span t-field="doc.check_in_date"/></td></tr>
+                                    <tr><td class="k">Check-out</td><td><span t-field="doc.check_out_date"/></td></tr>
+                                    <tr><td class="k">Nights</td><td t-esc="doc.nights"/></tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h2>Pricing</h2>
+                        <table class="hst-kv">
+                            <tr><td class="k">Nightly Rate</td><td><span t-field="doc.rate" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td></tr>
+                            <tr><td class="k">Total</td><td><span t-field="doc.total_price" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/></td></tr>
+                            <tr t-if="doc.deposit_required"><td class="k">Deposit</td>
+                                <td><span t-field="doc.deposit_amount" t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    (<span t-esc="'paid' if doc.deposit_paid else 'not yet paid'"/>)</td></tr>
+                        </table>
+
+                        <div class="hst-note" t-if="doc.rate_plan_id and doc.rate_plan_id.cancellation_policy_id">
+                            <strong>Cancellation policy: </strong><span t-esc="doc.rate_plan_id.cancellation_policy_id.name"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

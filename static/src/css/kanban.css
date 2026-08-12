@@ -1,0 +1,100 @@
+/*
+ * Shadcn-neutral kanban card + status-pill styling, scoped to `.o_hst_*`.
+ * Cards stay a plain neutral surface; only the status pill carries color —
+ * this is the module's one visual-status convention, reused everywhere a
+ * room/bed/booking status is shown (kanban cards, list/form badges,
+ * Room Kanban board, Housekeeping list). Do not invent a second palette
+ * elsewhere; add a new `.o_hst_pill_<state>` modifier here instead.
+ *
+ * Brand v2 (terracotta/teal) modernization: a warm-toned shadow instead of
+ * the old cool-gray one, a softer/larger radius (from theme.css's bumped
+ * --hst-radius), and a subtle hover lift for a more contemporary feel.
+ */
+
+.o_hst_kanban .o_kanban_record {
+    background: hsl(var(--hst-card));
+    border: 1px solid hsl(var(--hst-border));
+    border-radius: var(--hst-radius);
+    box-shadow: 0 1px 3px hsl(20 30% 20% / 0.06);
+    padding: 12px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.o_hst_kanban .o_kanban_record:hover {
+    border-color: hsl(var(--hst-primary) / 0.4);
+    box-shadow: 0 6px 16px hsl(20 30% 20% / 0.10);
+    transform: translateY(-1px);
+}
+
+.o_hst_kanban .o_hst_title {
+    font-weight: 600;
+    color: hsl(var(--hst-fg));
+}
+
+.o_hst_kanban .o_hst_meta {
+    color: hsl(var(--hst-muted-fg));
+    font-size: 0.85em;
+}
+
+.o_hst_kanban .o_hst_ref {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    color: hsl(var(--hst-muted-fg));
+    font-size: 0.8em;
+}
+
+/* Status pill — shared by room/bed status and booking state */
+.o_hst_pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.o_hst_pill_secondary {
+    background: hsl(var(--hst-secondary) / 0.12);
+    color: hsl(var(--hst-secondary));
+}
+
+.o_hst_pill_primary {
+    background: hsl(var(--hst-primary) / 0.12);
+    color: hsl(var(--hst-primary));
+}
+
+.o_hst_pill_success {
+    background: hsl(var(--hst-success) / 0.14);
+    color: hsl(var(--hst-success));
+}
+
+.o_hst_pill_warning {
+    background: hsl(var(--hst-warning) / 0.20);
+    color: hsl(var(--hst-warning-fg));
+}
+
+.o_hst_pill_destructive {
+    background: hsl(var(--hst-destructive) / 0.12);
+    color: hsl(var(--hst-destructive));
+}
+
+/*
+ * State -> pill color mapping (apply the matching class via a computed `*_color` field on the
+ * model returning one of secondary/primary/success/warning/destructive, referenced in the view
+ * as `t-attf-class="o_hst_pill o_hst_pill_#{record.xxx_color.raw_value}"`). As of Phase 3, room
+ * status split into two independent fields and bed status changed shape - this mapping now
+ * covers all four axes on the SAME five variants (deliberately reusing a variant across closely
+ * related states rather than inventing a 6th - e.g. maintenance and out_of_order are both
+ * "blocked", cancelled and no_show are both "didn't happen"):
+ *
+ * hostel.room.state          hostel.room.housekeeping_status   hostel.bed.status
+ *   available    -> success    clean          -> success         available -> success
+ *   occupied     -> primary    dirty          -> warning          booked    -> secondary
+ *   maintenance  -> destructive inspected     -> primary          occupied  -> primary
+ *   out_of_order -> destructive do_not_disturb -> secondary       maintenance -> destructive
+ *
+ * hostel.booking.state
+ *   draft -> secondary   confirmed -> primary   checked_in -> success
+ *   checked_out -> warning   cancelled -> destructive   no_show -> destructive
+ */

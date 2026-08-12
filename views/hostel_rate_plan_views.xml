@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_rate_plan_view_list" model="ir.ui.view">
+        <field name="name">hostel.rate_plan.list</field>
+        <field name="model">hostel.rate_plan</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" class="o_hst_list">
+                <field name="name"/>
+                <field name="room_type_id"/>
+                <field name="price_per_night" widget="monetary"/>
+                <field name="cancellation_policy_id"/>
+                <field name="min_stay_nights"/>
+                <field name="max_stay_nights"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hostel_rate_plan_view_form" model="ir.ui.view">
+        <field name="name">hostel.rate_plan.form</field>
+        <field name="model">hostel.rate_plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. Standard"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="room_type_id"/>
+                            <field name="price_per_night" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="cancellation_policy_id"/>
+                            <field name="min_stay_nights"/>
+                            <field name="max_stay_nights"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_rate_plan_action" model="ir.actions.act_window">
+        <field name="name">Rate Plans</field>
+        <field name="res_model">hostel.rate_plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

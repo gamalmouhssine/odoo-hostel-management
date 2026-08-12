@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_hostel_occupancy" model="ir.actions.report">
+        <field name="name">Occupancy Summary</field>
+        <field name="model">hostel.occupancy.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hostel_management.report_hostel_occupancy</field>
+        <field name="report_file">hostel_management.report_hostel_occupancy</field>
+    </record>
+
+    <template id="report_hostel_occupancy">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="lines" t-value="doc._get_occupancy_lines()"/>
+                <div class="page">
+                    <style>
+                        .hst-rep { font-family: Arial, sans-serif; color: #201A17; font-size: 12px; }
+                        .hst-rep .hst-band { background: #C2410C; color: #fff; padding: 16px 20px;
+                            border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+                        .hst-rep .hst-band h1 { margin: 0; font-size: 20px; letter-spacing: 1px; }
+                        .hst-rep table.hst-lines { width: 100%; border-collapse: collapse; margin-top: 6px; }
+                        .hst-rep table.hst-lines th { background: #FAF6F2; color: #C2410C; text-align: left;
+                            padding: 6px 8px; border-bottom: 2px solid #C2410C; }
+                        .hst-rep table.hst-lines td { padding: 6px 8px; border-bottom: 1px solid #e6e9ee; }
+                        .hst-rep table.hst-lines td.amt, .hst-rep table.hst-lines th.amt { text-align: right; }
+                        .hst-rep .hst-total td { font-weight: bold; color: #C2410C; border-top: 2px solid #C2410C; }
+                        .hst-rep .hst-empty { color: #6b7684; font-style: italic; padding: 8px 0; }
+                    </style>
+                    <div class="hst-rep">
+                        <div class="hst-band">
+                            <div>
+                                <h1>OCCUPANCY SUMMARY</h1>
+                                <div t-esc="doc.property_id.display_name or 'All Properties'"/>
+                            </div>
+                            <div style="text-align:right;">
+                                <span t-field="doc.date_from"/> — <span t-field="doc.date_to"/>
+                            </div>
+                        </div>
+
+                        <table class="hst-lines" t-if="lines">
+                            <thead>
+                                <tr>
+                                    <th>Room Type</th>
+                                    <th class="amt">Nights Sold</th>
+                                    <th class="amt">Available Room-nights</th>
+                                    <th class="amt">Occupancy %</th>
+                                    <th class="amt">Revenue</th>
+                                    <th class="amt">ADR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lines" t-as="line">
+                                    <td t-esc="line['room_type'].display_name"/>
+                                    <td class="amt" t-esc="line['nights_sold']"/>
+                                    <td class="amt" t-esc="line['available_room_nights']"/>
+                                    <td class="amt"><span t-esc="'%.1f' % line['occupancy_pct']"/>%</td>
+                                    <td class="amt"><span t-esc="'%.2f' % line['revenue']"/></td>
+                                    <td class="amt"><span t-esc="'%.2f' % line['adr']"/></td>
+                                </tr>
+                                <tr class="hst-total">
+                                    <td>Total</td>
+                                    <td class="amt" t-esc="sum(l['nights_sold'] for l in lines)"/>
+                                    <td class="amt" t-esc="sum(l['available_room_nights'] for l in lines)"/>
+                                    <td class="amt"></td>
+                                    <td class="amt"><span t-esc="'%.2f' % sum(l['revenue'] for l in lines)"/></td>
+                                    <td class="amt"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="hst-empty" t-if="not lines">No qualifying bookings in this date range.</div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
