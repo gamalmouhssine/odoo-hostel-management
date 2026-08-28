@@ -35,6 +35,7 @@ access_hostel_housekeeping_task_type_manager,hostel.housekeeping.task.type.manag
 access_hostel_housekeeping_task_staff,hostel.housekeeping.task.staff,model_hostel_housekeeping_task,group_hostel_staff,1,1,1,0
 access_hostel_housekeeping_task_manager,hostel.housekeeping.task.manager,model_hostel_housekeeping_task,group_hostel_manager,1,1,1,1
 access_hostel_occupancy_report_wizard_staff,hostel.occupancy.report.wizard.staff,model_hostel_occupancy_report_wizard,group_hostel_staff,1,1,1,1
+access_hostel_dashboard_staff,hostel.dashboard.staff,model_hostel_dashboard,group_hostel_staff,1,1,1,1
 access_hostel_room_housekeeping,hostel.room.housekeeping,model_hostel_room,group_hostel_housekeeping,1,1,0,0
 access_hostel_bed_housekeeping,hostel.bed.housekeeping,model_hostel_bed,group_hostel_housekeeping,1,0,0,0
 access_hostel_room_type_housekeeping,hostel.room.type.housekeeping,model_hostel_room_type,group_hostel_housekeeping,1,0,0,0

@@ -4,3 +4,4 @@ from . import test_folio
 from . import test_housekeeping
 from . import test_reports
 from . import test_security
+from . import test_dashboard

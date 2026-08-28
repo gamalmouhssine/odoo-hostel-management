@@ -1,0 +1,96 @@
+/*
+ * KPI dashboard (hostel.dashboard) - reuses the exact same shadcn-neutral shell as
+ * kanban.css's cards (same border/radius/shadow/hover-lift tokens from theme.css), scaled up
+ * into a stat-card grid. Card accent color meaning is set per-card below, not the general
+ * `.o_hst_pill_*` state-color mapping (kanban.css) - these aren't a status pill, they're a
+ * fixed semantic role per metric (arrivals = accent, departures = warning, in-house = primary,
+ * revenue = success), except occupancy, which computes its color server-side via
+ * hostel.dashboard.occupancy_color (see that model for why its scale runs opposite the usual
+ * "problem" convention - full beds are the good outcome here).
+ */
+
+.o_hst_dashboard .o_form_sheet {
+    max-width: 960px;
+}
+
+.o_hst_kpi_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 8px 0 24px;
+}
+
+.o_hst_kpi_card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: hsl(var(--hst-card));
+    border: 1px solid hsl(var(--hst-border));
+    border-radius: var(--hst-radius);
+    box-shadow: 0 1px 3px hsl(20 30% 20% / 0.06);
+    padding: 16px 18px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.o_hst_kpi_card:hover {
+    box-shadow: 0 6px 16px hsl(20 30% 20% / 0.10);
+    transform: translateY(-1px);
+}
+
+.o_hst_kpi_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 999px;
+    font-size: 18px;
+}
+
+.o_hst_kpi_body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.o_hst_kpi_value {
+    font-size: 1.65em;
+    font-weight: 700;
+    color: hsl(var(--hst-fg));
+    line-height: 1.15;
+}
+
+.o_hst_kpi_value .o_field_widget,
+.o_hst_kpi_value .o_field_widget input {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    border: none;
+    background: transparent;
+    padding: 0;
+    pointer-events: none;
+}
+
+.o_hst_kpi_label {
+    font-size: 0.8em;
+    font-weight: 500;
+    color: hsl(var(--hst-muted-fg));
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* Fixed per-card accent (arrivals/departures/in-house/revenue) */
+.o_hst_kpi_accent .o_hst_kpi_icon { background: hsl(var(--hst-accent) / 0.14); color: hsl(var(--hst-accent)); }
+.o_hst_kpi_warning .o_hst_kpi_icon { background: hsl(var(--hst-warning) / 0.20); color: hsl(var(--hst-warning-fg)); }
+.o_hst_kpi_primary .o_hst_kpi_icon { background: hsl(var(--hst-primary) / 0.14); color: hsl(var(--hst-primary)); }
+.o_hst_kpi_success .o_hst_kpi_icon { background: hsl(var(--hst-success) / 0.14); color: hsl(var(--hst-success)); }
+
+/* Occupancy card keeps the same neutral icon circle as the others for visual consistency; only
+   its status line is a small colored badge (server-computed occupancy_status), same proven
+   decoration-* pattern already used for folio_status/payment_state elsewhere in this module. */
+.o_hst_kpi_card .o_field_badge.badge {
+    margin-top: 2px;
+    font-size: 0.7em;
+}

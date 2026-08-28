@@ -4,6 +4,9 @@
               groups="hostel_management.group_hostel_staff,hostel_management.group_hostel_housekeeping"
               web_icon="hostel_management,static/description/icon.png"/>
 
+    <menuitem id="menu_hostel_dashboard" name="Dashboard" parent="menu_hostel_management_root"
+              action="hostel_dashboard_action" groups="hostel_management.group_hostel_staff" sequence="5"/>
+
     <menuitem id="menu_hostel_bookings" name="Bookings" parent="menu_hostel_management_root"
               action="hostel_booking_action" groups="hostel_management.group_hostel_staff" sequence="10"/>
 

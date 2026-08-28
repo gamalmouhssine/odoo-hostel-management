@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hostel_dashboard_view_form" model="ir.ui.view">
+        <field name="name">hostel.dashboard.form</field>
+        <field name="model">hostel.dashboard</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" class="o_hst_dashboard">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Hostel Dashboard</h1>
+                    </div>
+                    <group>
+                        <field name="property_id"/>
+                    </group>
+                    <div class="o_hst_kpi_grid">
+                        <div class="o_hst_kpi_card o_hst_kpi_accent">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-sign-in" title="Arrivals"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="arrivals_today_count" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Arrivals Today</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_warning">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-sign-out" title="Departures"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="departures_today_count" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Departures Today</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_primary">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-bed" title="In-house"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="in_house_count" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">In-House Now</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-pie-chart" title="Occupancy"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="occupancy_pct_today" widget="percentage" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Today's Occupancy</span>
+                                <field name="occupancy_status" widget="badge"
+                                       decoration-success="occupancy_status == 'success'"
+                                       decoration-warning="occupancy_status == 'warning'"
+                                       decoration-info="occupancy_status == 'primary'"
+                                       nolabel="1"/>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_success">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-usd" title="Revenue"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="revenue_mtd" widget="monetary" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Revenue This Month</span>
+                            </div>
+                        </div>
+                    </div>
+                    <field name="currency_id" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hostel_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">hostel.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'form_view_ref': 'hostel_management.hostel_dashboard_view_form'}</field>
+    </record>
+</odoo>
