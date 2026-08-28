@@ -9,6 +9,7 @@ access_hostel_booking_staff,hostel.booking.staff,model_hostel_booking,group_host
 access_hostel_booking_manager,hostel.booking.manager,model_hostel_booking,group_hostel_manager,1,1,1,1
 access_hostel_property_staff,hostel.property.staff,model_hostel_property,group_hostel_staff,1,1,1,0
 access_hostel_property_manager,hostel.property.manager,model_hostel_property,group_hostel_manager,1,1,1,1
+access_hostel_property_internal_user,hostel.property.internal.user,model_hostel_property,base.group_user,1,0,0,0
 access_hostel_rate_plan_staff,hostel.rate_plan.staff,model_hostel_rate_plan,group_hostel_staff,1,1,1,0
 access_hostel_rate_plan_manager,hostel.rate_plan.manager,model_hostel_rate_plan,group_hostel_manager,1,1,1,1
 access_hostel_amenity_staff,hostel.amenity.staff,model_hostel_amenity,group_hostel_staff,1,0,0,0

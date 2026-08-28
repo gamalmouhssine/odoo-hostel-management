@@ -79,3 +79,17 @@ class TestSecurity(TransactionCase):
 
         staff_view_infos = self.env['res.partner'].with_user(self.staff_user_a).get_view(view_type='form')
         self.assertIn('id_document_number', staff_view_infos['arch'])
+
+    def test_plain_admin_can_open_any_users_access_rights_tab(self):
+        # Real bug: hostel_property_ids sits on res.users' Access Rights tab with no groups=
+        # restriction, so opening it reads hostel.property - which a fresh installer's admin
+        # account (not yet a member of any Hostel group) previously couldn't read at all,
+        # throwing an Access Error just from opening Settings > Users. Every internal user
+        # needs at least read access to hostel.property for this tab to be safely openable,
+        # independent of whether they've been added to a Hostel role.
+        general_user = self.env['res.users'].create({
+            'name': 'General Admin', 'login': 'general_admin@example.com',
+            'group_ids': [(6, 0, [self.env.ref('base.group_user').id])],
+        })
+        self.staff_user_a.hostel_property_ids  # ensure a real value exists to read, not just []
+        self.env['res.users'].with_user(general_user).browse(self.staff_user_a.id).read(['hostel_property_ids'])
