@@ -14,6 +14,13 @@ class ResPartner(models.Model):
     nationality_id = fields.Many2one('res.country', string='Nationality')
     emergency_contact_name = fields.Char(string='Emergency Contact Name')
     emergency_contact_phone = fields.Char(string='Emergency Contact Phone')
+    is_blacklisted = fields.Boolean(
+        string='Blacklisted',
+        help="Blocks confirming any new booking for this guest (e.g. past damage, unpaid bill, "
+             "no-show pattern). Existing draft bookings are left alone so staff can still "
+             "discuss the situation with a manager before deciding - the block is on "
+             "confirming, not on drafting.")
+    blacklist_reason = fields.Text()
 
     booking_ids = fields.One2many('hostel.booking', 'guest_id', string='Bookings')
     currency_id = fields.Many2one('res.currency', compute='_compute_hostel_currency_id')

@@ -436,6 +436,27 @@ class TestBooking(TransactionCase):
         booking.action_check_in()  # must not raise
         self.assertEqual(booking.state, 'checked_in')
 
+    def test_confirm_blocked_for_blacklisted_guest(self):
+        self.guest.write({'is_blacklisted': True, 'blacklist_reason': 'Damaged a mattress'})
+        booking = self._make_booking()
+        with self.assertRaises(UserError):
+            booking.action_confirm()
+        self.assertEqual(booking.state, 'draft')
+
+    def test_draft_booking_can_still_be_created_for_blacklisted_guest(self):
+        # The block is on confirming, not on drafting - staff can still discuss with a manager
+        # before deciding, rather than being unable to even record the request.
+        self.guest.is_blacklisted = True
+        booking = self._make_booking()  # must not raise
+        self.assertEqual(booking.state, 'draft')
+
+    def test_confirm_allowed_once_guest_unblacklisted(self):
+        self.guest.is_blacklisted = True
+        booking = self._make_booking()
+        self.guest.is_blacklisted = False
+        booking.action_confirm()  # must not raise
+        self.assertEqual(booking.state, 'confirmed')
+
     def test_confirm_sends_booking_confirmation_email_when_guest_has_email(self):
         self.guest.email = 'guest@example.com'
         booking = self._make_booking()

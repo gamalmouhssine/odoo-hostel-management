@@ -18,6 +18,8 @@
                             <field name="is_hostel_guest"/>
                             <field name="nationality_id"/>
                             <field name="date_of_birth" groups="hostel_management.group_hostel_staff"/>
+                            <field name="is_blacklisted"/>
+                            <field name="blacklist_reason" invisible="not is_blacklisted"/>
                         </group>
                         <group string="Identity Document" groups="hostel_management.group_hostel_staff">
                             <field name="id_document_type_id"/>
@@ -38,6 +40,20 @@
                     </group>
                 </page>
             </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_list_hostel_inherit" model="ir.ui.view">
+        <field name="name">res.partner.list.hostel.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <list position="attributes">
+                <attribute name="decoration-danger">is_blacklisted</attribute>
+            </list>
+            <field name="complete_name" position="after">
+                <field name="is_blacklisted" optional="show"/>
+            </field>
         </field>
     </record>
 

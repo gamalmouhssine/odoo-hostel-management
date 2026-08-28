@@ -8,3 +8,4 @@ __pycache__/
 # Internal build diary / phase tracker - not customer-facing, kept locally only.
 CLAUDE.md
 PHASES.md
+NEXT_FEATURES.md

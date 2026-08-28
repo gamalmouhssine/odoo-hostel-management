@@ -235,6 +235,11 @@ class HostelBooking(models.Model):
         for booking in self:
             if not booking.check_in_date or not booking.check_out_date or booking.check_out_date <= booking.check_in_date:
                 raise UserError("Check-out date must be after the check-in date.")
+            if booking.guest_id.is_blacklisted:
+                raise UserError(
+                    "%s is blacklisted and cannot be confirmed for a new booking.%s"
+                    % (booking.guest_id.name, (" Reason: %s" % booking.guest_id.blacklist_reason)
+                       if booking.guest_id.blacklist_reason else ""))
             booking.state = 'confirmed'
             # Only a bed-level booking gets a visible hold before check-in: a bed can be
             # `booked`, but hostel.room.state has no equivalent value - a room-level booking
