@@ -79,10 +79,12 @@ class TestDashboard(TransactionCase):
         # Property B has no bookings of its own - scoping must exclude property A's.
         self.assertEqual(dashboard.in_house_count, 0)
         self.assertEqual(dashboard.occupancy_ratio_today, 0.0)
+        self.assertFalse(dashboard.in_house_booking_ids)
 
         dashboard_a = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
         self.assertEqual(dashboard_a.in_house_count, 1)
         self.assertEqual(dashboard_a.occupancy_ratio_today, 0.5)  # 1 of 2 rooms in property A
+        self.assertEqual(dashboard_a.in_house_booking_ids.booking_id, booking_a)
 
     def test_dashboard_occupancy_status_thresholds(self):
         # Scoped to property A alone (2 rooms/beds) throughout - avoids the shared-dev-database
@@ -119,6 +121,39 @@ class TestDashboard(TransactionCase):
         dashboard = self.env['hostel.dashboard'].create({})
         self.assertEqual(dashboard.arrivals_today_count, 1)
         self.assertEqual(dashboard.departures_today_count, 1)
+
+    def test_dashboard_upcoming_arrivals_within_next_7_days(self):
+        soon = self._make_booking(
+            self.room_a1, check_in_date=self.today + timedelta(days=3),
+            check_out_date=self.today + timedelta(days=5))
+        soon.action_confirm()
+        too_far = self._make_booking(
+            self.room_a2, check_in_date=self.today + timedelta(days=10),
+            check_out_date=self.today + timedelta(days=12))
+        too_far.action_confirm()
+
+        dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
+        self.assertEqual(dashboard.upcoming_arrival_ids.booking_id, soon)
+
+    def test_dashboard_pending_housekeeping_and_overdue_invoice_counts(self):
+        booking = self._make_booking(self.room_a1)
+        booking.action_confirm()
+        booking.action_check_in()
+        booking.action_check_out()  # auto-creates a pending checkout_clean task
+        task = self.env['hostel.housekeeping.task'].search([('room_id', '=', self.room_a1.id)])
+        self.assertTrue(task)
+
+        booking2 = self._make_booking(self.room_a2)
+        booking2.action_confirm()
+        booking2.action_check_in()
+        folio = booking2.folio_ids[0]
+        folio.action_create_invoice()
+        folio.invoice_id.action_post()
+        folio.invoice_id.invoice_date_due = self.today - timedelta(days=1)
+
+        dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
+        self.assertEqual(dashboard.pending_housekeeping_count, 1)
+        self.assertEqual(dashboard.overdue_invoice_count, 1)
 
     def test_dashboard_period_kpis_and_breakdown_scoped_to_property(self):
         # 2-night stay in property A, entirely inside the default date range (this month).
@@ -157,6 +192,30 @@ class TestDashboard(TransactionCase):
         self.assertEqual(dashboard.nights_sold_period, 0)
         self.assertEqual(dashboard.revenue_period, 0.0)
         self.assertFalse(dashboard.line_ids)
+
+    def test_onchange_recomputes_when_property_changes_in_an_open_form(self):
+        # This is what actually happens live in the browser: the dashboard opens blank (default,
+        # aggregating every property), then the user picks one from the dropdown before ever
+        # saving - a real onchange() RPC, not a fresh create() with the field pre-filled. Uses
+        # Odoo's own onchange() simulation rather than a plain write(), since write() would never
+        # exercise the client-facing @api.onchange path at all.
+        booking = self._make_booking(self.room_a1)
+        booking.action_confirm()
+        booking.action_check_in()
+
+        Dashboard = self.env['hostel.dashboard']
+        defaults = Dashboard.default_get(['property_id', 'date_from', 'date_to'])
+        values = dict(defaults, property_id=self.property_a.id)
+        result = Dashboard.onchange(values, ['property_id'], {
+            'property_id': '', 'in_house_count': '', 'occupancy_ratio_today': '',
+            'in_house_booking_ids': {'fields': {'booking_id': {}, 'guest_id': {}}},
+        })
+        new_values = result.get('value', {})
+        self.assertEqual(new_values.get('in_house_count'), 1)
+        self.assertEqual(new_values.get('occupancy_ratio_today'), 0.5)
+        booking_line_commands = new_values.get('in_house_booking_ids') or []
+        self.assertEqual(len(booking_line_commands), 1)
+        self.assertEqual(booking_line_commands[0][2]['booking_id'], booking.id)
 
     def test_get_view_renders_for_staff(self):
         staff_group = self.env.ref('hostel_management.group_hostel_staff')

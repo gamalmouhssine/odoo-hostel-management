@@ -4,16 +4,19 @@
         <field name="name">hostel.dashboard.form</field>
         <field name="model">hostel.dashboard</field>
         <field name="arch" type="xml">
-            <form create="0" edit="0" class="o_hst_dashboard">
+            <form class="o_hst_dashboard">
                 <sheet>
                     <div class="oe_title">
                         <h1>Hostel Dashboard</h1>
                     </div>
-                    <group col="4">
-                        <field name="property_id"/>
-                        <span/>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
+                    <group>
+                        <group>
+                            <field name="property_id"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
                     </group>
 
                     <h3 class="o_hst_dashboard_section">Right Now</h3>
@@ -49,6 +52,24 @@
                                        decoration-warning="occupancy_status == 'warning'"
                                        decoration-info="occupancy_status == 'primary'"
                                        nolabel="1"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="o_hst_dashboard_section">Needs Attention</h3>
+                    <div class="o_hst_kpi_grid">
+                        <div class="o_hst_kpi_card o_hst_kpi_alert o_hst_kpi_warning">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-paint-brush" title="Housekeeping"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="pending_housekeeping_count" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Housekeeping Tasks Open</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_alert o_hst_kpi_danger">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-exclamation-triangle" title="Overdue invoices"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="overdue_invoice_count" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Overdue Invoices</span>
                             </div>
                         </div>
                     </div>
@@ -97,6 +118,27 @@
                             <field name="currency_id" column_invisible="1"/>
                         </list>
                     </field>
+
+                    <h3 class="o_hst_dashboard_section">In-House Guests</h3>
+                    <field name="in_house_booking_ids" nolabel="1">
+                        <list create="0" edit="0" delete="0" class="o_hst_list">
+                            <field name="booking_id"/>
+                            <field name="guest_id"/>
+                            <field name="room_display_name" string="Room/Bed"/>
+                            <field name="reference_date" string="Checkout Date"/>
+                        </list>
+                    </field>
+
+                    <h3 class="o_hst_dashboard_section">Upcoming Arrivals (Next 7 Days)</h3>
+                    <field name="upcoming_arrival_ids" nolabel="1">
+                        <list create="0" edit="0" delete="0" class="o_hst_list">
+                            <field name="booking_id"/>
+                            <field name="guest_id"/>
+                            <field name="room_display_name" string="Room/Bed"/>
+                            <field name="reference_date" string="Check-in Date"/>
+                        </list>
+                    </field>
+
                     <field name="currency_id" invisible="1"/>
                 </sheet>
             </form>

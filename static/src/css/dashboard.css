@@ -101,6 +101,19 @@
 .o_hst_kpi_warning .o_hst_kpi_icon { background: hsl(var(--hst-warning) / 0.20); color: hsl(var(--hst-warning-fg)); }
 .o_hst_kpi_primary .o_hst_kpi_icon { background: hsl(var(--hst-primary) / 0.14); color: hsl(var(--hst-primary)); }
 .o_hst_kpi_success .o_hst_kpi_icon { background: hsl(var(--hst-success) / 0.14); color: hsl(var(--hst-success)); }
+.o_hst_kpi_danger .o_hst_kpi_icon { background: hsl(var(--hst-destructive) / 0.14); color: hsl(var(--hst-destructive)); }
+
+/* "Needs Attention" cards get a left accent bar in their own color, so that row specifically
+   reads as alerts rather than neutral stats even before you read the number - a dedicated
+   `.o_hst_kpi_alert` modifier stacked on top of the existing color class, not reusing
+   .o_hst_kpi_warning alone, since that color is also used for Departures Today (a neutral stat,
+   not something needing action). */
+.o_hst_kpi_alert.o_hst_kpi_warning {
+    border-left: 3px solid hsl(var(--hst-warning));
+}
+.o_hst_kpi_alert.o_hst_kpi_danger {
+    border-left: 3px solid hsl(var(--hst-destructive));
+}
 
 /* Occupancy card keeps the same neutral icon circle as the others for visual consistency; only
    its status line is a small colored badge (server-computed occupancy_status), same proven
