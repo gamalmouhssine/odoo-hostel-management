@@ -9,9 +9,14 @@
                     <div class="oe_title">
                         <h1>Hostel Dashboard</h1>
                     </div>
-                    <group>
+                    <group col="4">
                         <field name="property_id"/>
+                        <span/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
                     </group>
+
+                    <h3 class="o_hst_dashboard_section">Right Now</h3>
                     <div class="o_hst_kpi_grid">
                         <div class="o_hst_kpi_card o_hst_kpi_accent">
                             <div class="o_hst_kpi_icon"><i class="fa fa-sign-in" title="Arrivals"/></div>
@@ -37,7 +42,7 @@
                         <div class="o_hst_kpi_card">
                             <div class="o_hst_kpi_icon"><i class="fa fa-pie-chart" title="Occupancy"/></div>
                             <div class="o_hst_kpi_body">
-                                <span class="o_hst_kpi_value"><field name="occupancy_pct_today" widget="percentage" nolabel="1"/></span>
+                                <span class="o_hst_kpi_value"><field name="occupancy_ratio_today" widget="percentage" nolabel="1"/></span>
                                 <span class="o_hst_kpi_label">Today's Occupancy</span>
                                 <field name="occupancy_status" widget="badge"
                                        decoration-success="occupancy_status == 'success'"
@@ -46,14 +51,52 @@
                                        nolabel="1"/>
                             </div>
                         </div>
+                    </div>
+
+                    <h3 class="o_hst_dashboard_section">This Period</h3>
+                    <div class="o_hst_kpi_grid">
                         <div class="o_hst_kpi_card o_hst_kpi_success">
                             <div class="o_hst_kpi_icon"><i class="fa fa-usd" title="Revenue"/></div>
                             <div class="o_hst_kpi_body">
-                                <span class="o_hst_kpi_value"><field name="revenue_mtd" widget="monetary" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Revenue This Month</span>
+                                <span class="o_hst_kpi_value"><field name="revenue_period" widget="monetary" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Revenue</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_accent">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-moon-o" title="Nights sold"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="nights_sold_period" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Nights Sold</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card o_hst_kpi_primary">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-tag" title="ADR"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="adr_period" widget="monetary" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Avg. Daily Rate</span>
+                            </div>
+                        </div>
+                        <div class="o_hst_kpi_card">
+                            <div class="o_hst_kpi_icon"><i class="fa fa-line-chart" title="Occupancy"/></div>
+                            <div class="o_hst_kpi_body">
+                                <span class="o_hst_kpi_value"><field name="occupancy_ratio_period" widget="percentage" nolabel="1"/></span>
+                                <span class="o_hst_kpi_label">Avg. Occupancy</span>
                             </div>
                         </div>
                     </div>
+
+                    <h3 class="o_hst_dashboard_section">By Room Type</h3>
+                    <field name="line_ids" nolabel="1">
+                        <list create="0" edit="0" delete="0" class="o_hst_list">
+                            <field name="room_type_id"/>
+                            <field name="nights_sold"/>
+                            <field name="available_room_nights"/>
+                            <field name="occupancy_ratio" widget="percentage"/>
+                            <field name="adr" widget="monetary"/>
+                            <field name="revenue" widget="monetary"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
                     <field name="currency_id" invisible="1"/>
                 </sheet>
             </form>

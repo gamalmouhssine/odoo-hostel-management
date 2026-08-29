@@ -21,11 +21,10 @@ class TestDashboard(TransactionCase):
             'name': 'Dash Type B', 'code': 'DTYPEB', 'property_id': cls.property_b.id,
             'capacity': 1, 'default_rate': 40.0,
         })
-        # Property A: 2 rooms, one occupied -> 50% occupancy. Property B: 1 room, unoccupied.
-        # Every room, even a single-occupancy private one, carries its own bed record - see
-        # phase1_master_data.xml's own comment on this. Occupancy is tracked bed-by-bed
-        # (hostel.property._compute_today_occupancy_rate does the same), so a room with no bed
-        # record would never register as occupied no matter what bookings it has.
+        # Property A: 2 rooms, Property B: 1 room - every room carries its own bed record, even
+        # single-occupancy ones (see phase1_master_data.xml's own comment on this), since
+        # occupancy is tracked bed-by-bed (hostel.property._compute_today_occupancy_rate does
+        # the same) - a room with no bed record would never register as occupied.
         cls.room_a1 = cls.env['hostel.room'].create({'name': 'DA1', 'room_type_id': cls.room_type_a.id})
         cls.bed_a1 = cls.env['hostel.bed'].create({'name': 'DA1-A', 'room_id': cls.room_a1.id})
         cls.room_a2 = cls.env['hostel.room'].create({'name': 'DA2', 'room_type_id': cls.room_type_a.id})
@@ -45,6 +44,18 @@ class TestDashboard(TransactionCase):
         }
         base.update(values)
         return self.env['hostel.booking'].create(base)
+
+    def test_percentage_fields_store_a_ratio_not_a_percentage(self):
+        # The exact bug the client caught live in the UI: occupancy_ratio_today must be a 0-1
+        # ratio (e.g. 0.5 for 50%), because Odoo's `percentage` widget multiplies by 100 itself
+        # for display (confirmed against formatPercentage() in web's formatters.js) - storing an
+        # already-multiplied value like 50.0 renders as "5000%".
+        booking = self._make_booking(self.room_a1)
+        booking.action_confirm()
+        booking.action_check_in()
+        dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
+        self.assertEqual(dashboard.occupancy_ratio_today, 0.5)
+        self.assertLessEqual(dashboard.occupancy_ratio_today, 1.0)
 
     def test_dashboard_kpis_aggregate_across_all_properties_by_default(self):
         # This suite runs against a shared dev database that may already carry other real
@@ -67,18 +78,18 @@ class TestDashboard(TransactionCase):
         dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_b.id})
         # Property B has no bookings of its own - scoping must exclude property A's.
         self.assertEqual(dashboard.in_house_count, 0)
-        self.assertEqual(dashboard.occupancy_pct_today, 0.0)
+        self.assertEqual(dashboard.occupancy_ratio_today, 0.0)
 
         dashboard_a = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
         self.assertEqual(dashboard_a.in_house_count, 1)
-        self.assertEqual(dashboard_a.occupancy_pct_today, 50.0)  # 1 of 2 rooms in property A
+        self.assertEqual(dashboard_a.occupancy_ratio_today, 0.5)  # 1 of 2 rooms in property A
 
     def test_dashboard_occupancy_status_thresholds(self):
-        # Scoped to property A alone (2 rooms/beds) throughout - avoids the same shared-dev-
-        # database pollution as the aggregate test above, and property B doesn't need to be
-        # involved at all to exercise all three thresholds.
+        # Scoped to property A alone (2 rooms/beds) throughout - avoids the shared-dev-database
+        # pollution issue above, and property B doesn't need to be involved to exercise all
+        # three thresholds.
         dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
-        self.assertEqual(dashboard.occupancy_pct_today, 0.0)
+        self.assertEqual(dashboard.occupancy_ratio_today, 0.0)
         self.assertEqual(dashboard.occupancy_status, 'warning')
 
         booking_a1 = self._make_booking(self.room_a1)
@@ -109,26 +120,43 @@ class TestDashboard(TransactionCase):
         self.assertEqual(dashboard.arrivals_today_count, 1)
         self.assertEqual(dashboard.departures_today_count, 1)
 
-    def test_dashboard_revenue_mtd_sums_posted_invoices_this_month(self):
-        booking = self._make_booking(self.room_a1)
+    def test_dashboard_period_kpis_and_breakdown_scoped_to_property(self):
+        # 2-night stay in property A, entirely inside the default date range (this month).
+        booking = self._make_booking(
+            self.room_a1, check_in_date=self.today, check_out_date=self.today + timedelta(days=2))
         booking.action_confirm()
         booking.action_check_in()
-        folio = booking.folio_ids[0]
-        folio.action_create_invoice()
-        folio.invoice_id.action_post()
 
-        dashboard = self.env['hostel.dashboard'].create({})
-        self.assertAlmostEqual(dashboard.revenue_mtd, folio.amount_total, places=2)
+        dashboard = self.env['hostel.dashboard'].create({
+            'property_id': self.property_a.id,
+            'date_from': self.today, 'date_to': self.today + timedelta(days=5),
+        })
+        self.assertEqual(dashboard.nights_sold_period, 2)
+        self.assertEqual(dashboard.revenue_period, 2 * 40.0)
+        self.assertEqual(dashboard.adr_period, 40.0)
+        self.assertEqual(len(dashboard.line_ids), 1)
+        line = dashboard.line_ids[0]
+        self.assertEqual(line.room_type_id, self.room_type_a)
+        self.assertEqual(line.nights_sold, 2)
+        self.assertEqual(line.available_room_nights, 2 * 6)  # 2 rooms x 6 days in range
+        self.assertAlmostEqual(line.occupancy_ratio, 2.0 / 12, places=4)
+        self.assertLessEqual(line.occupancy_ratio, 1.0)
 
-    def test_dashboard_revenue_mtd_excludes_unposted_invoices(self):
-        booking = self._make_booking(self.room_a1)
+    def test_dashboard_period_excludes_bookings_outside_the_range(self):
+        booking = self._make_booking(
+            self.room_a1, check_in_date=self.today - timedelta(days=30),
+            check_out_date=self.today - timedelta(days=28))
         booking.action_confirm()
         booking.action_check_in()
-        folio = booking.folio_ids[0]
-        folio.action_create_invoice()  # left in draft, never posted
+        booking.action_check_out()
 
-        dashboard = self.env['hostel.dashboard'].create({})
-        self.assertEqual(dashboard.revenue_mtd, 0.0)
+        dashboard = self.env['hostel.dashboard'].create({
+            'property_id': self.property_a.id,
+            'date_from': self.today, 'date_to': self.today + timedelta(days=5),
+        })
+        self.assertEqual(dashboard.nights_sold_period, 0)
+        self.assertEqual(dashboard.revenue_period, 0.0)
+        self.assertFalse(dashboard.line_ids)
 
     def test_get_view_renders_for_staff(self):
         staff_group = self.env.ref('hostel_management.group_hostel_staff')

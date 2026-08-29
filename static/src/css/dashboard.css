@@ -5,12 +5,27 @@
  * `.o_hst_pill_*` state-color mapping (kanban.css) - these aren't a status pill, they're a
  * fixed semantic role per metric (arrivals = accent, departures = warning, in-house = primary,
  * revenue = success), except occupancy, which computes its color server-side via
- * hostel.dashboard.occupancy_color (see that model for why its scale runs opposite the usual
+ * hostel.dashboard.occupancy_status (see that model for why its scale runs opposite the usual
  * "problem" convention - full beds are the good outcome here).
  */
 
 .o_hst_dashboard .o_form_sheet {
-    max-width: 960px;
+    max-width: 1100px;
+}
+
+.o_hst_dashboard_section {
+    margin: 20px 0 4px;
+    font-size: 0.95em;
+    font-weight: 700;
+    color: hsl(var(--hst-muted-fg));
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid hsl(var(--hst-border));
+    padding-bottom: 8px;
+}
+
+.o_hst_dashboard .o_hst_list {
+    margin-top: 8px;
 }
 
 .o_hst_kpi_grid {
