@@ -73,12 +73,17 @@ class HostelDashboard(models.TransientModel):
              "blended across all of them.")
 
     line_ids = fields.One2many('hostel.dashboard.line', 'dashboard_id', string='By Room Type')
+    # Two DISTINCT inverse fields, not one shared inverse split by a `domain=` - the shared-inverse
+    # version was a real bug the client hit as a "Missing required value for the field 'Kind'"
+    # validation error: two One2many fields over the same inverse are the same underlying relation,
+    # so the second field's `(5, 0, 0)` (clear-all) command wiped the rows the first had just set,
+    # and on save the web client sent conflicting create commands for rows it could no longer
+    # attribute to either side. Separate inverse fields make them genuinely independent relations
+    # and remove the need for the discriminator field entirely.
     in_house_booking_ids = fields.One2many(
-        'hostel.dashboard.booking.line', 'dashboard_id', string='In-House Guests',
-        domain=[('kind', '=', 'in_house')])
+        'hostel.dashboard.booking.line', 'in_house_dashboard_id', string='In-House Guests')
     upcoming_arrival_ids = fields.One2many(
-        'hostel.dashboard.booking.line', 'dashboard_id', string='Upcoming Arrivals',
-        domain=[('kind', '=', 'upcoming_arrival')])
+        'hostel.dashboard.booking.line', 'upcoming_dashboard_id', string='Upcoming Arrivals')
 
     # Refreshed both on creation (so direct ORM use - tests, shell, `env['hostel.dashboard'].
     # create({...})` - gets correct values immediately, matching this model's usual TransientModel
@@ -121,7 +126,6 @@ class HostelDashboard(models.TransientModel):
         ])
         self.in_house_count = len(in_house_bookings)
         self.in_house_booking_ids = [(5, 0, 0)] + [(0, 0, {
-            'kind': 'in_house',
             'booking_id': booking.id,
             'reference_date': booking.check_out_date,
         }) for booking in in_house_bookings]
@@ -132,7 +136,6 @@ class HostelDashboard(models.TransientModel):
             ('check_in_date', '>=', today), ('check_in_date', '<=', today + timedelta(days=7)),
         ], order='check_in_date')
         self.upcoming_arrival_ids = [(5, 0, 0)] + [(0, 0, {
-            'kind': 'upcoming_arrival',
             'booking_id': booking.id,
             'reference_date': booking.check_in_date,
         }) for booking in upcoming_bookings]
@@ -245,10 +248,11 @@ class HostelDashboardBookingLine(models.TransientModel):
     _name = 'hostel.dashboard.booking.line'
     _description = 'Hostel Dashboard Booking Row (in-house / upcoming arrival)'
 
-    dashboard_id = fields.Many2one('hostel.dashboard', required=True, ondelete='cascade')
-    kind = fields.Selection([
-        ('in_house', 'In-House'), ('upcoming_arrival', 'Upcoming Arrival'),
-    ], required=True)
+    # One row belongs to exactly one of these two lists, and which field is set IS the
+    # discriminator - no separate `kind` field needed (an earlier version had one, alongside a
+    # single shared inverse, and that combination was the source of a real validation-error bug).
+    in_house_dashboard_id = fields.Many2one('hostel.dashboard', ondelete='cascade')
+    upcoming_dashboard_id = fields.Many2one('hostel.dashboard', ondelete='cascade')
     booking_id = fields.Many2one('hostel.booking', required=True, ondelete='cascade')
     reference_date = fields.Date(
         string='Date', help="Checkout date for an in-house row, check-in date for an "

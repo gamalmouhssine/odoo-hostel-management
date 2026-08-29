@@ -18,7 +18,7 @@
         <field name="name">hostel.bed.form</field>
         <field name="model">hostel.bed</field>
         <field name="arch" type="xml">
-            <form>
+            <form class="o_hst_form">
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. 102-A"/></h1>

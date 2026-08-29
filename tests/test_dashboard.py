@@ -122,6 +122,30 @@ class TestDashboard(TransactionCase):
         self.assertEqual(dashboard.arrivals_today_count, 1)
         self.assertEqual(dashboard.departures_today_count, 1)
 
+    def test_both_booking_lists_populate_independently_and_flush_cleanly(self):
+        # Regression for a real bug the client hit as "Missing required value for the field
+        # 'Kind'": both lists used to share ONE inverse field separated only by a domain, so they
+        # were really the same relation - setting the second list's rows with a (5, 0, 0)
+        # clear-all wiped the first list's rows, and saving sent conflicting create commands.
+        # Asserting BOTH lists are populated at the same time is what catches that; asserting
+        # either one alone would have passed even with the bug.
+        in_house = self._make_booking(self.room_a1)
+        in_house.action_confirm()
+        in_house.action_check_in()
+        arriving = self._make_booking(
+            self.room_a2, check_in_date=self.today + timedelta(days=2),
+            check_out_date=self.today + timedelta(days=4))
+        arriving.action_confirm()
+
+        dashboard = self.env['hostel.dashboard'].create({'property_id': self.property_a.id})
+        self.assertEqual(dashboard.in_house_booking_ids.booking_id, in_house)
+        self.assertEqual(dashboard.upcoming_arrival_ids.booking_id, arriving)
+        # A row must belong to exactly one list, never both (they're separate relations now).
+        self.assertFalse(dashboard.in_house_booking_ids & dashboard.upcoming_arrival_ids)
+        # Flushing is what raised the ValidationError in the buggy version - a required field on
+        # a row the ORM could no longer attribute to either side.
+        dashboard.flush_recordset()
+
     def test_dashboard_upcoming_arrivals_within_next_7_days(self):
         soon = self._make_booking(
             self.room_a1, check_in_date=self.today + timedelta(days=3),

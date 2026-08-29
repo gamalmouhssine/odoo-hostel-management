@@ -26,6 +26,51 @@
     width: 100%;
 }
 
+/* Branded hero band - the module's signature element, using the two brand colors as an actual
+   gradient rather than only as small accents. This is what gives the app a recognisable identity
+   at a glance instead of looking like a default Odoo form. Text only (no form inputs) - Odoo's
+   own input widgets carry light-theme colors that would be unreadable on this. */
+.o_hst_hero {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: -16px -16px 20px;
+    padding: 22px 26px;
+    background: linear-gradient(135deg, hsl(var(--hst-primary)) 0%, hsl(var(--hst-accent)) 100%);
+    border-radius: 0 0 var(--hst-radius) var(--hst-radius);
+    color: #fff;
+}
+
+.o_hst_hero_mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 16px;
+    font-size: 22px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.o_hst_hero_eyebrow {
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+h1.o_hst_hero_title {
+    margin: 2px 0 0;
+    font-size: 1.7em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
 .o_hst_dashboard_section {
     display: flex;
     align-items: center;
@@ -116,7 +161,10 @@
 .o_hst_kpi_value {
     font-size: 1.75em;
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    /* Tabular figures so numbers line up column-wise across cards and don't jitter in width as
+       values change (default proportional digits make "11" much narrower than "28"). */
+    font-variant-numeric: tabular-nums;
     color: hsl(var(--hst-fg));
     line-height: 1.15;
 }

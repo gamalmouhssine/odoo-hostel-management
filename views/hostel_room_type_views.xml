@@ -21,7 +21,7 @@
         <field name="name">hostel.room.type.form</field>
         <field name="model">hostel.room.type</field>
         <field name="arch" type="xml">
-            <form>
+            <form class="o_hst_form">
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. Dorm-6"/></h1>

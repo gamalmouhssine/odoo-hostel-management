@@ -6,8 +6,16 @@
         <field name="arch" type="xml">
             <form class="o_hst_dashboard">
                 <sheet>
-                    <div class="oe_title">
-                        <h1>Hostel Dashboard</h1>
+                    <!-- Branded hero band: deliberately contains only text/branding, no form
+                         inputs. Odoo's own input widgets carry their own light-theme colors and
+                         would be unreadable on a dark gradient - the filters stay below on the
+                         normal background where their standard styling still works. -->
+                    <div class="o_hst_hero">
+                        <div class="o_hst_hero_mark"><i class="fa fa-bed"/></div>
+                        <div>
+                            <div class="o_hst_hero_eyebrow">Hostel Management</div>
+                            <h1 class="o_hst_hero_title">Front Desk Dashboard</h1>
+                        </div>
                     </div>
                     <group>
                         <group>
@@ -107,7 +115,7 @@
                     </div>
 
                     <h3 class="o_hst_dashboard_section">By Room Type</h3>
-                    <field name="line_ids" nolabel="1">
+                    <field name="line_ids" nolabel="1" readonly="1">
                         <list create="0" edit="0" delete="0" class="o_hst_list">
                             <field name="room_type_id"/>
                             <field name="nights_sold"/>
@@ -120,7 +128,7 @@
                     </field>
 
                     <h3 class="o_hst_dashboard_section">In-House Guests</h3>
-                    <field name="in_house_booking_ids" nolabel="1">
+                    <field name="in_house_booking_ids" nolabel="1" readonly="1">
                         <list create="0" edit="0" delete="0" class="o_hst_list">
                             <field name="booking_id"/>
                             <field name="guest_id"/>
@@ -130,7 +138,7 @@
                     </field>
 
                     <h3 class="o_hst_dashboard_section">Upcoming Arrivals (Next 7 Days)</h3>
-                    <field name="upcoming_arrival_ids" nolabel="1">
+                    <field name="upcoming_arrival_ids" nolabel="1" readonly="1">
                         <list create="0" edit="0" delete="0" class="o_hst_list">
                             <field name="booking_id"/>
                             <field name="guest_id"/>

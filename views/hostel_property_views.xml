@@ -19,7 +19,7 @@
         <field name="name">hostel.property.form</field>
         <field name="model">hostel.property</field>
         <field name="arch" type="xml">
-            <form>
+            <form class="o_hst_form">
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="e.g. Downtown Hostel"/></h1>

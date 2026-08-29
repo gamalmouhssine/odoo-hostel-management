@@ -12,6 +12,21 @@
  * booking, folio, room, and housekeeping task form.
  */
 
+/* Signature brand strip across the top of every form sheet in this module - the single most
+   repeated identity cue, since a form sheet is what you see on every booking, folio, room, bed,
+   property, room type, rate plan and housekeeping task. Uses the same terracotta -> teal
+   gradient as the dashboard's hero band, so the whole app reads as one product rather than a
+   set of default Odoo forms that happen to share a menu.
+   Drawn as a background gradient strip rather than `border-image`, which applies to all four
+   sides at once and would have interfered unpredictably with the sheet's existing
+   `border-width: 1px 0 1px 0`. */
+.o_hst_form .o_form_sheet {
+    background-image: linear-gradient(90deg, hsl(var(--hst-primary)), hsl(var(--hst-accent)));
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+    background-position: top left;
+}
+
 .o_hst_form header .btn-primary {
     background-color: hsl(var(--hst-primary));
     border-color: hsl(var(--hst-primary));
