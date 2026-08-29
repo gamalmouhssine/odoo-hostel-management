@@ -92,6 +92,7 @@ identically on Community or Enterprise:
     'images': [
         'static/description/banner.png',
         'static/description/main_screenshot.png',
+        'static/description/workflow.png',
         'static/description/screenshot_bookings.png',
         'static/description/screenshot_rooms_kanban.png',
         'static/description/screenshot_folio.png',

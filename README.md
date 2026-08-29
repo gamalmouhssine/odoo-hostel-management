@@ -19,6 +19,12 @@ Built **only** on modules available in Odoo Community (`base`, `mail`, `bus`, `c
 `account`, `product`, `calendar`) — no Enterprise dependency, no Studio, no Documents app, no
 third-party Python packages. Installs and behaves identically on Community or Enterprise.
 
+## How it works
+
+Set the property up once, then every stay follows the same path — most of it automatic.
+
+![How Hostel Management works](hostel_management/static/description/workflow.png)
+
 ## Screenshots
 
 **Front desk dashboard** — arrivals, departures, in-house, occupancy, what needs attention, and
