@@ -86,7 +86,16 @@ identically on Community or Enterprise:
             'hostel_management/static/src/css/dashboard.css',
         ],
     },
-    'images': ['static/description/banner.png'],
+    # Banner first (the store list tile), then the screenshots shown on the listing page. The
+    # Apps FAQ says the image whose name ends in "_screenshot" is picked as the large display
+    # image, hence main_screenshot.png rather than a descriptive name for the dashboard shot.
+    'images': [
+        'static/description/banner.png',
+        'static/description/main_screenshot.png',
+        'static/description/screenshot_bookings.png',
+        'static/description/screenshot_rooms_kanban.png',
+        'static/description/screenshot_folio.png',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,

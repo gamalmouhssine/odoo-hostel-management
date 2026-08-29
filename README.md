@@ -2,160 +2,141 @@
   <img src="static/description/banner.png" alt="Hostel Management for Odoo 19" width="100%"/>
 </p>
 
-# Hostel Management
+<p align="center">
+  <b>A complete guest-hostel PMS for Odoo 19</b><br/>
+  Multi-property rooms &amp; dorm beds · overlap-safe bookings · folios &amp; billing · housekeeping · live front-desk alerts · reports
+</p>
 
-A complete guest-hostel PMS for Odoo 19: multi-property room/bed inventory (private
-rooms sold whole, dorms sold bed-by-bed), overlap-safe bookings with locked-in pricing,
-check-in/check-out, itemized folios that invoice through standard Odoo Invoicing,
-housekeeping, reports, and a set of live front-desk mechanisms (popup notifications,
-automatic no-show detection, deposit enforcement, confirmation emails) that a v1.0 feature
-list usually leaves for "later."
+<p align="center">
+  <img src="https://img.shields.io/badge/Odoo-19.0-714B67" alt="Odoo 19.0"/>
+  <img src="https://img.shields.io/badge/license-OPL--1-C2410C" alt="OPL-1"/>
+  <img src="https://img.shields.io/badge/tests-115%20passing-115E59" alt="115 tests passing"/>
+</p>
+
+---
 
 Built **only** on modules available in Odoo Community (`base`, `mail`, `bus`, `contacts`,
-`account`, `product`, `calendar`) — no Enterprise dependency, no Studio, no Documents app,
-no third-party Python packages. Installs and behaves identically on Community or
-Enterprise.
+`account`, `product`, `calendar`) — no Enterprise dependency, no Studio, no Documents app, no
+third-party Python packages. Installs and behaves identically on Community or Enterprise.
 
-92 automated tests, 0 failures. License: [OPL-1](LICENSE) (Odoo Proprietary License v1.0) — $100 USD via the Odoo Apps Store.
+## Screenshots
+
+**Front desk dashboard** — arrivals, departures, in-house, occupancy, what needs attention, and
+period revenue/ADR with a per-room-type breakdown.
+
+![Dashboard](static/description/main_screenshot.png)
+
+**Bookings** — folio status, activity reminders, and the full stay lifecycle at a glance.
+
+![Bookings](static/description/screenshot_bookings.png)
+
+**Rooms** — kanban grouped by property, with independent occupancy and housekeeping status.
+
+![Rooms](static/description/screenshot_rooms_kanban.png)
+
+**Folios** — an itemized running bill per stay, invoiced through standard Odoo Invoicing.
+
+![Folio](static/description/screenshot_folio.png)
 
 ## Features
 
-- **Multi-property master data** — properties, room types (private room or dorm, bed
-  type, amenities, photos), rooms and beds with independent occupancy vs. housekeeping
-  status, and rate plans layered on top of a room type's flat default rate. Every
-  descriptive/config list (amenities, bed types, sleeping types, ID document types,
-  cancellation policies, booking sources, charge types) is an editable model, not a
-  hardcoded picklist.
-- **Bookings** — whole-room or single-bed, with an overlap constraint that correctly
-  blocks a whole-room booking against every bed inside it (and vice versa); price locked
-  at booking time so a later rate change never moves an existing booking's price;
-  deposits; OTA source/reference tracking; full lifecycle
-  (`draft → confirmed → checked_in → checked_out`, plus `cancelled`/`no_show`) with
-  check-in/check-out actually driving room/bed status, including the partial-occupancy
-  dorm cascade.
-- **Folios & billing** — an itemized running bill per stay, auto-opened at check-in with
-  its stay line pre-filled; add charges (laundry, food, damage, tours, ...) any time;
-  one-click invoicing via standard Odoo Invoicing with no hardcoded tax handling.
-  Cancelling or deleting an invoice automatically reopens its folio for re-billing.
-- **Housekeeping** — a `checkout_clean` task auto-created on every checkout
-  (deduplicated), tracked pending → in progress → done → verified, with a one-click
-  "Mark Clean" front-desk shortcut and a live popup the moment a task is assigned to
-  someone.
-- **Live front-desk mechanisms** — popup notifications (on top of standard chatter
-  activities) for arrivals today, checkouts today, and overstays; automatic no-show
-  detection that frees a room nobody checked into; deposit enforcement at check-in;
-  automatic booking-confirmation emails to the guest; deletion guards so a room, bed, or
-  folio with real history can't be silently removed out from under a booking.
-- **Reports & dashboards** — QWeb PDFs (booking confirmation, check-in registration
-  card, folio, daily arrivals & departures, occupancy/ADR summary), revenue/occupancy
-  pivot and graph views, and a status-colored Room Kanban board with front-desk saved
-  filters (arrivals today, departures today, in-house now).
-- **Security** — property-scoped access for Staff and a separate Housekeeping role
-  (unrestricted if no properties are assigned, rather than locked out); Manager is
-  always unrestricted; guest ID-document fields are field-level protected.
-- **Migration scripts** included, so upgrading an existing install carries old data
-  forward cleanly instead of leaving stale values behind.
+**Master data** — properties, room types (private room or dorm, bed type, amenities, photos),
+rooms and beds with independent occupancy vs. housekeeping status, and rate plans layered on top
+of a room type's flat default rate. Every descriptive list (amenities, bed types, sleeping types,
+ID document types, cancellation policies, booking sources, charge types) is an editable model, not
+a hardcoded picklist.
 
-Deliberately out of scope: POS folio integration, a guest-facing portal, and OTA
-channel-manager live sync (only manual `source`/`external_ref` logging).
+**Bookings** — whole-room or single-bed, with an overlap constraint that correctly blocks a
+whole-room booking against every bed inside it and vice versa. Price is locked at booking time, so
+a later rate change never moves an existing booking's price. Deposits, OTA source/reference
+tracking, and a full lifecycle (`draft → confirmed → checked_in → checked_out`, plus `cancelled`
+and `no_show`) where check-in/check-out actually drive room and bed status, including the
+partial-occupancy dorm cascade.
 
-Release notes live in [CHANGELOG.md](CHANGELOG.md).
+**Folios &amp; billing** — an itemized running bill per stay, auto-opened at check-in with its stay
+line pre-filled. Add charges (laundry, food, damage, tours) any time, then invoice with one click
+through standard Odoo Invoicing — no hardcoded tax. Cancelling or deleting an invoice
+automatically reopens its folio for re-billing.
+
+**Housekeeping** — a checkout-clean task auto-created on every checkout (deduplicated), tracked
+pending → in progress → done → verified, with a one-click "Mark Clean" shortcut and a live popup
+the moment a task is assigned.
+
+**Live front-desk mechanisms** — popup notifications for arrivals today, checkouts today, and
+overstays; automatic no-show detection that frees a room nobody checked into; overdue-invoice
+reminders; deposit enforcement at check-in; automatic booking-confirmation emails; a guest
+blacklist that blocks confirming new bookings; and deletion guards so a room, bed, or folio with
+real history can't be silently removed out from under a booking.
+
+**Dashboard &amp; reports** — a front-desk KPI dashboard (arrivals/departures/in-house/occupancy,
+what needs attention, period revenue/nights/ADR, per-room-type breakdown, in-house guests and
+upcoming arrivals), QWeb PDFs (booking confirmation, check-in registration card, folio, daily
+arrivals &amp; departures, occupancy/ADR summary), plus revenue/occupancy pivot and graph views.
+
+**Security** — property-scoped access for Staff and a separate Housekeeping role (unrestricted if
+no properties are assigned, rather than locked out); Manager is always unrestricted; guest
+ID-document fields are field-level protected.
+
+**Migration scripts** included, so upgrading an existing install carries old data forward cleanly.
+
+Deliberately out of scope: POS folio integration, a guest-facing portal, and OTA channel-manager
+live sync (manual `source`/`external_ref` logging only).
+
+## Requirements
+
+- Odoo **19.0** (Community or Enterprise)
+- No third-party Python packages
 
 ## Installation
 
-Drop this folder into any Odoo 19 instance's addons path, update the apps list, and
-install **Hostel Management** from Apps (enable Developer Mode first if custom apps
-aren't showing).
+1. Copy this folder into your Odoo addons path.
+2. Restart Odoo and update the Apps list (Developer Mode on).
+3. Search for **Hostel Management** and install.
 
-```
-./odoo-bin -c odoo.conf -i hostel_management -d your_database
-```
+Or from the command line:
 
-## Development (Docker)
-
-This repo was built against a local Docker Compose stack (Odoo 19 + Postgres) with
-`My_Modules/` mounted onto the addons path:
-
-```
-docker compose up -d
+```bash
+./odoo-bin -c odoo.conf -d your_database -i hostel_management
 ```
 
-Odoo is then available at http://localhost:8069.
+To try it with sample data, add `--with-demo` on a **fresh** database (Odoo only loads demo data
+at a database's first install).
 
-**Installing/upgrading** — don't run this while the `odoo` service is also up on the
-same database (`docker compose exec` shares the running container's network namespace
-and collides on port 8069); use `docker compose run --rm` instead, which spins up a
-separate one-off container:
+## First steps
 
-```
-docker compose run --rm odoo python /odoo/odoo-19.0/odoo-bin -c /etc/odoo/odoo.conf \
-  -i hostel_management --with-demo -d odoo --test-enable --stop-after-init
-```
+1. **Configuration → Properties** — create your property (address, timezone, check-in/out times).
+2. **Configuration → Room Types**, then **Rooms** and **Beds** — every room carries at least one
+   bed record, including single-occupancy private rooms, since occupancy is tracked per bed.
+3. **Settings → Users** — give your team the **Hostel Staff**, **Hostel Housekeeping**, or
+   **Hostel Manager** role. Leave *Hostel Properties* empty for full access, or assign properties
+   to scope a user to them.
+4. **Bookings → New** — book a room or a bed, then walk **Confirm → Check In → Check Out** and
+   watch the folio, room status, and housekeeping task follow along.
 
-Swap `-i` for `-u` to upgrade an already-installed module instead of installing fresh.
-Watch the output for `N tests ... 0 failed, 0 error(s)` and no traceback — that's a clean
-run.
+## Security roles
 
-**Note on demo data**: `--with-demo` only actually loads demo data the *first* time a
-module is installed (an `-u` upgrade of an already-installed module does not
-retroactively load it) — if you need demo data on a database where the module is
-already installed without it, drop and recreate the database first, or
-uninstall/reinstall the module.
+| Role | Access |
+|---|---|
+| **Hostel Staff** | Front desk: bookings, folios, properties, room types, rate plans; read-only on the configuration lists |
+| **Hostel Housekeeping** | Rooms and housekeeping tasks; read-only on beds; no access to bookings, folios, or guest ID documents |
+| **Hostel Manager** | Everything above, never restricted by property |
 
-## Getting started (using the demo data)
+Guest ID document fields (type, number, scan, date of birth) are stripped from the form
+server-side for users outside Hostel Staff/Manager — real access control, not a CSS hide.
 
-Install with `--with-demo` (above), then open the **Hostel** app.
-
-1. **Configuration** — browse Properties, Room Types (across two demo properties, each
-   with amenities/a sleeping type/a bed type), Rooms, and Beds. Under **Config Lists**
-   (Manager only) you'll find the configurable picklists — all editable without
-   touching code.
-2. **Bookings** — the demo data ships bookings across every state, including an
-   OTA-sourced one and a second-property booking using a non-refundable rate plan. Open
-   a `draft` one and click through **Confirm → Check In → Check Out** yourself to watch
-   room/bed status, the folio, and the live popup notifications update.
-3. **Folios** — every checked-in demo booking already has an auto-created folio with
-   its stay line. Add an extra charge line and click **Create Invoice** to see a real
-   `account.move` generated with no hardcoded tax.
-4. **Housekeeping** — a checked-out room leaves behind a pending `checkout_clean` task.
-   Assign it to a housekeeping user to see the assignment popup, then walk
-   **Start → Done → Verify**, or use the room's own **Mark Clean** shortcut instead.
-5. **Reports** — print a booking confirmation, check-in registration card, or folio
-   from any relevant record's Print menu. Hostel → Reports → **Occupancy Report** opens
-   a date-range wizard; **Revenue & Occupancy** is a pivot/graph on the same data.
-
-## Multi-property access
-
-`hostel.property` supports running more than one location from one database. By
-default, **Hostel Staff and Hostel Housekeeping users see every property** — access
-only becomes scoped once you explicitly assign properties to a user (Settings → Users
-→ open a user → **Access Rights** tab → **Hostel Properties** field). Once a user has
-at least one property assigned, they only see that property's rooms/beds/bookings/
-folios/housekeeping tasks; **Hostel Manager is never restricted**, regardless of this
-field. This fallback (empty = unrestricted, not "restricted to nothing") is deliberate:
-a naive `in` domain would have silently locked out every user on a single-property
-install instead.
-
-## Security groups
-
-- **Hostel Staff** — front desk: full booking/folio/property/room-type/rate-plan
-  access, read-only on the configurable picklists.
-- **Hostel Housekeeping** — a separate, independently-assignable track (not a level
-  under Staff): read/write on rooms, read-only on beds, full task management, zero
-  access to bookings/folios/guest ID documents.
-- **Hostel Manager** — implies both of the above, unrestricted by property.
-
-Guest ID document fields (type, number, scan, date of birth) are hidden from general
-Odoo users (anyone who can open Contacts but isn't Hostel Staff/Manager) at the view
-level — Odoo strips those fields out of the form server-side for unauthorized users,
-not just via CSS.
+Property scoping is opt-in: a Staff or Housekeeping user with **no** properties assigned sees
+everything; assigning at least one property restricts them to it.
 
 ## Testing
 
-```
-docker compose run --rm odoo python /odoo/odoo-19.0/odoo-bin -c /etc/odoo/odoo.conf \
-  -u hostel_management --with-demo -d odoo --test-enable --test-tags /hostel_management --stop-after-init
+```bash
+./odoo-bin -c odoo.conf -d your_database -u hostel_management \
+  --test-enable --test-tags /hostel_management --stop-after-init
 ```
 
-92 tests across `tests/test_master_data.py`, `test_booking.py`, `test_folio.py`,
-`test_housekeeping.py`, `test_reports.py`, and `test_security.py`.
+115 tests across master data, bookings, folios, housekeeping, dashboard, reports, and security.
+
+## License &amp; support
+
+Licensed under the [Odoo Proprietary License v1.0 (OPL-1)](LICENSE). Available on the Odoo Apps
+Store. Release notes in [CHANGELOG.md](CHANGELOG.md).

@@ -28,7 +28,11 @@ class HostelProperty(models.Model):
     room_count = fields.Integer(compute='_compute_room_bed_count')
     bed_count = fields.Integer(compute='_compute_room_bed_count')
     today_occupancy_rate = fields.Float(
-        compute='_compute_today_occupancy_rate', string="Today's Occupancy %")
+        compute='_compute_today_occupancy_rate', string="Today's Occupancy",
+        help="Beds currently marked occupied ÷ total beds in this property. Stored as a 0-1 "
+             "ratio because both views render it with widget=\"percentage\", which multiplies "
+             "by 100 itself - storing an already-multiplied percentage here is what produced a "
+             "visible \"2608.7%\" on the property form.")
 
     _code_company_uniq = models.Constraint(
         'unique(code, company_id)',
@@ -45,7 +49,7 @@ class HostelProperty(models.Model):
         for prop in self:
             beds = prop.room_ids.bed_ids
             occupied = len(beds.filtered(lambda bed: bed.status == 'occupied'))
-            prop.today_occupancy_rate = (occupied / len(beds) * 100.0) if beds else 0.0
+            prop.today_occupancy_rate = (occupied / len(beds)) if beds else 0.0
 
     def _get_todays_arrivals(self):
         self.ensure_one()

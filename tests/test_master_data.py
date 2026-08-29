@@ -95,6 +95,24 @@ class TestMasterData(TransactionCase):
         self.assertIn(room, self.property.room_ids)
         self.assertGreaterEqual(self.property.bed_count, 2)
 
+    def test_property_occupancy_is_a_ratio_not_a_percentage(self):
+        # Regression: this field is rendered with widget="percentage" in both the property form
+        # and list, and that widget multiplies by 100 itself - storing an already-multiplied
+        # value here displayed a literal "2608.7%" on the property form. A ratio never exceeds 1.
+        prop = self.env['hostel.property'].create({'name': 'Occupancy Prop', 'code': 'OCCP'})
+        room_type = self.env['hostel.room.type'].create({
+            'name': 'Occupancy Type', 'code': 'OCCT', 'property_id': prop.id, 'capacity': 2,
+        })
+        room = self.env['hostel.room'].create({'name': 'OC1', 'room_type_id': room_type.id})
+        bed_a = self.env['hostel.bed'].create({'name': 'OC1-A', 'room_id': room.id})
+        self.env['hostel.bed'].create({'name': 'OC1-B', 'room_id': room.id})
+
+        self.assertEqual(prop.today_occupancy_rate, 0.0)
+        bed_a.status = 'occupied'
+        prop.invalidate_recordset(['today_occupancy_rate'])
+        self.assertEqual(prop.today_occupancy_rate, 0.5)  # 1 of 2 beds, NOT 50.0
+        self.assertLessEqual(prop.today_occupancy_rate, 1.0)
+
     @mute_logger('odoo.sql_db')
     def test_amenity_name_uniqueness_rejected(self):
         self.env['hostel.amenity'].create({'name': 'Sauna'})
