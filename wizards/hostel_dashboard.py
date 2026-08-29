@@ -20,21 +20,57 @@ class HostelDashboard(models.TransientModel):
     date_to = fields.Date(required=True, default=lambda self: fields.Date.context_today(self))
     currency_id = fields.Many2one('res.currency', default=lambda self: self.env.company.currency_id)
 
-    arrivals_today_count = fields.Integer(string='Arrivals Today')
-    departures_today_count = fields.Integer(string='Departures Today')
-    in_house_count = fields.Integer(string='In-House Now')
-    occupancy_ratio_today = fields.Float(string="Today's Occupancy")
+    arrivals_today_count = fields.Integer(
+        string='Arrivals Today', help="Confirmed bookings with a check-in date of today.")
+    departures_today_count = fields.Integer(
+        string='Departures Today', help="Checked-in bookings with a check-out date of today.")
+    in_house_count = fields.Integer(
+        string='In-House Now', help="Bookings currently checked in - guests physically on-site "
+                                     "right now, listed below in In-House Guests.")
+    occupancy_ratio_today = fields.Float(
+        string="Today's Occupancy",
+        help="Beds currently marked occupied ÷ total beds, across the selected "
+             "propert(y/ies), right now. Bed-based, not room-based, so a dorm with some free "
+             "bunks counts as partly occupied rather than fully occupied.")
     occupancy_status = fields.Selection([
         ('warning', 'Needs Attention'), ('primary', 'Steady'), ('success', 'Strong'),
-    ], string='Occupancy Status')
+    ], string='Occupancy Status',
+        help="Strong: 70% or higher. Steady: 30-70%. Needs Attention: under 30%. Unlike a "
+             "\"problem\" status elsewhere in this module, high occupancy is the GOOD outcome "
+             "here - full beds are revenue, not an issue.")
 
-    pending_housekeeping_count = fields.Integer(string='Housekeeping Tasks Open')
-    overdue_invoice_count = fields.Integer(string='Overdue Invoices')
+    pending_housekeeping_count = fields.Integer(
+        string='Housekeeping Tasks Open',
+        help="Housekeeping tasks still Pending or In Progress (not yet Done or Verified), "
+             "across the selected propert(y/ies).")
+    overdue_invoice_count = fields.Integer(
+        string='Overdue Invoices',
+        help="Invoiced folios whose invoice has passed its due date and is not fully paid "
+             "(Not Paid, Partially Paid, or Blocked) - the same set of invoices the daily "
+             "overdue-invoice reminder notifies staff about.")
 
-    revenue_period = fields.Monetary(string='Revenue')
-    nights_sold_period = fields.Integer(string='Nights Sold')
-    adr_period = fields.Monetary(string='ADR')
-    occupancy_ratio_period = fields.Float(string='Avg. Occupancy')
+    revenue_period = fields.Monetary(
+        string='Revenue',
+        help="Total billed value of stays overlapping the selected date range: for every "
+             "checked-in/checked-out booking, the nights that actually fall inside the range "
+             "times that booking's own locked-in nightly rate - summed across every room type. "
+             "Same figure as the sum of the Revenue column in the table below.")
+    nights_sold_period = fields.Integer(
+        string='Nights Sold',
+        help="Total nights actually stayed within the selected date range, across every room "
+             "type - only the portion of each stay that falls inside the range counts, not the "
+             "full length of a stay that started earlier or ends later.")
+    adr_period = fields.Monetary(
+        string='ADR',
+        help="Average Daily Rate = Revenue ÷ Nights Sold for the whole period - the "
+             "average nightly rate actually charged, blended across every room type and "
+             "booking (not a list price - reflects whatever rate each booking actually locked "
+             "in).")
+    occupancy_ratio_period = fields.Float(
+        string='Avg. Occupancy',
+        help="Total Nights Sold ÷ total Available Room-Nights across every room type in "
+             "the period - the same ratio as each room-type row's Occupancy column, but "
+             "blended across all of them.")
 
     line_ids = fields.One2many('hostel.dashboard.line', 'dashboard_id', string='By Room Type')
     in_house_booking_ids = fields.One2many(
@@ -183,11 +219,25 @@ class HostelDashboardLine(models.TransientModel):
 
     dashboard_id = fields.Many2one('hostel.dashboard', required=True, ondelete='cascade')
     room_type_id = fields.Many2one('hostel.room.type', required=True)
-    nights_sold = fields.Integer()
-    available_room_nights = fields.Integer()
-    occupancy_ratio = fields.Float(string='Occupancy')
-    revenue = fields.Monetary()
-    adr = fields.Monetary(string='ADR')
+    nights_sold = fields.Integer(
+        help="Nights actually stayed by guests of this room type within the selected date "
+             "range - only the portion of each stay that falls inside the range counts, not "
+             "the full length of stay if it started earlier or ends later.")
+    available_room_nights = fields.Integer(
+        help="The most this room type COULD have sold in the range: number of rooms of this "
+             "type x number of days in the range. E.g. 2 rooms x 29 days = 58.")
+    occupancy_ratio = fields.Float(
+        string='Occupancy',
+        help="Nights Sold ÷ Available Room-Nights - the share of this room type's total "
+             "capacity that was actually booked in the range.")
+    revenue = fields.Monetary(
+        help="Sum of (nights counted x that booking's own locked-in nightly rate) for every "
+             "booking of this room type overlapping the range.")
+    adr = fields.Monetary(
+        string='ADR',
+        help="Average Daily Rate = Revenue ÷ Nights Sold - the average nightly rate actually "
+             "charged for this room type in the range (reflects whatever rate each booking "
+             "locked in, not necessarily the room type's list price).")
     currency_id = fields.Many2one(related='dashboard_id.currency_id')
 
 

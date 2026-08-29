@@ -1,12 +1,13 @@
 /*
  * KPI dashboard (hostel.dashboard) - reuses the exact same shadcn-neutral shell as
  * kanban.css's cards (same border/radius/shadow/hover-lift tokens from theme.css), scaled up
- * into a stat-card grid. Card accent color meaning is set per-card below, not the general
- * `.o_hst_pill_*` state-color mapping (kanban.css) - these aren't a status pill, they're a
- * fixed semantic role per metric (arrivals = accent, departures = warning, in-house = primary,
- * revenue = success), except occupancy, which computes its color server-side via
- * hostel.dashboard.occupancy_status (see that model for why its scale runs opposite the usual
- * "problem" convention - full beds are the good outcome here).
+ * into a stat-card grid with a colored top accent bar + icon halo per card. Card accent color
+ * meaning is fixed per-card below, not the general `.o_hst_pill_*` state-color mapping
+ * (kanban.css) - these aren't a status pill, they're a fixed semantic role per metric (arrivals
+ * = accent, departures = warning, in-house = primary, revenue = success), except occupancy,
+ * which computes its color server-side via hostel.dashboard.occupancy_status (see that model
+ * for why its scale runs opposite the usual "problem" convention - full beds are the good
+ * outcome here).
  */
 
 .o_hst_dashboard .o_form_sheet {
@@ -14,14 +15,32 @@
 }
 
 .o_hst_dashboard_section {
-    margin: 20px 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0 4px;
     font-size: 0.95em;
     font-weight: 700;
-    color: hsl(var(--hst-muted-fg));
+    color: hsl(var(--hst-fg));
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    border-bottom: 1px solid hsl(var(--hst-border));
-    padding-bottom: 8px;
+}
+
+.o_hst_dashboard_section::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    border-radius: 2px;
+    background: hsl(var(--hst-primary));
+}
+
+.o_hst_dashboard_section::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: hsl(var(--hst-border));
+    margin-left: 4px;
 }
 
 .o_hst_dashboard .o_hst_list {
@@ -41,6 +60,7 @@
     gap: 14px;
     background: hsl(var(--hst-card));
     border: 1px solid hsl(var(--hst-border));
+    border-top: 3px solid hsl(var(--hst-border));
     border-radius: var(--hst-radius);
     box-shadow: 0 1px 3px hsl(20 30% 20% / 0.06);
     padding: 16px 18px;
@@ -48,8 +68,8 @@
 }
 
 .o_hst_kpi_card:hover {
-    box-shadow: 0 6px 16px hsl(20 30% 20% / 0.10);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 20px hsl(20 30% 20% / 0.12);
+    transform: translateY(-2px);
 }
 
 .o_hst_kpi_icon {
@@ -71,8 +91,9 @@
 }
 
 .o_hst_kpi_value {
-    font-size: 1.65em;
+    font-size: 1.75em;
     font-weight: 700;
+    letter-spacing: -0.01em;
     color: hsl(var(--hst-fg));
     line-height: 1.15;
 }
@@ -81,6 +102,7 @@
 .o_hst_kpi_value .o_field_widget input {
     font-size: inherit;
     font-weight: inherit;
+    letter-spacing: inherit;
     color: inherit;
     border: none;
     background: transparent;
@@ -89,30 +111,43 @@
 }
 
 .o_hst_kpi_label {
-    font-size: 0.8em;
-    font-weight: 500;
+    font-size: 0.78em;
+    font-weight: 600;
     color: hsl(var(--hst-muted-fg));
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
 }
 
-/* Fixed per-card accent (arrivals/departures/in-house/revenue) */
-.o_hst_kpi_accent .o_hst_kpi_icon { background: hsl(var(--hst-accent) / 0.14); color: hsl(var(--hst-accent)); }
-.o_hst_kpi_warning .o_hst_kpi_icon { background: hsl(var(--hst-warning) / 0.20); color: hsl(var(--hst-warning-fg)); }
-.o_hst_kpi_primary .o_hst_kpi_icon { background: hsl(var(--hst-primary) / 0.14); color: hsl(var(--hst-primary)); }
-.o_hst_kpi_success .o_hst_kpi_icon { background: hsl(var(--hst-success) / 0.14); color: hsl(var(--hst-success)); }
-.o_hst_kpi_danger .o_hst_kpi_icon { background: hsl(var(--hst-destructive) / 0.14); color: hsl(var(--hst-destructive)); }
+/* Fixed per-card accent: a soft icon-circle halo + a matching top border, so the card's role is
+   readable at a glance before the number is even read. */
+.o_hst_kpi_accent .o_hst_kpi_icon { background: hsl(var(--hst-accent) / 0.14); color: hsl(var(--hst-accent)); box-shadow: 0 0 0 4px hsl(var(--hst-accent) / 0.08); }
+.o_hst_kpi_accent { border-top-color: hsl(var(--hst-accent)); }
 
-/* "Needs Attention" cards get a left accent bar in their own color, so that row specifically
-   reads as alerts rather than neutral stats even before you read the number - a dedicated
-   `.o_hst_kpi_alert` modifier stacked on top of the existing color class, not reusing
+.o_hst_kpi_warning .o_hst_kpi_icon { background: hsl(var(--hst-warning) / 0.20); color: hsl(var(--hst-warning-fg)); box-shadow: 0 0 0 4px hsl(var(--hst-warning) / 0.10); }
+.o_hst_kpi_warning { border-top-color: hsl(var(--hst-warning)); }
+
+.o_hst_kpi_primary .o_hst_kpi_icon { background: hsl(var(--hst-primary) / 0.14); color: hsl(var(--hst-primary)); box-shadow: 0 0 0 4px hsl(var(--hst-primary) / 0.08); }
+.o_hst_kpi_primary { border-top-color: hsl(var(--hst-primary)); }
+
+.o_hst_kpi_success .o_hst_kpi_icon { background: hsl(var(--hst-success) / 0.14); color: hsl(var(--hst-success)); box-shadow: 0 0 0 4px hsl(var(--hst-success) / 0.08); }
+.o_hst_kpi_success { border-top-color: hsl(var(--hst-success)); }
+
+.o_hst_kpi_danger .o_hst_kpi_icon { background: hsl(var(--hst-destructive) / 0.14); color: hsl(var(--hst-destructive)); box-shadow: 0 0 0 4px hsl(var(--hst-destructive) / 0.08); }
+.o_hst_kpi_danger { border-top-color: hsl(var(--hst-destructive)); }
+
+/* "Needs Attention" cards additionally get a left accent bar in their own color (on top of the
+   top-border every card already has), so that whole row reads as alerts rather than neutral
+   stats even before you read the number - a dedicated `.o_hst_kpi_alert` modifier, not reusing
    .o_hst_kpi_warning alone, since that color is also used for Departures Today (a neutral stat,
    not something needing action). */
+.o_hst_kpi_alert {
+    border-left: 3px solid transparent;
+}
 .o_hst_kpi_alert.o_hst_kpi_warning {
-    border-left: 3px solid hsl(var(--hst-warning));
+    border-left-color: hsl(var(--hst-warning));
 }
 .o_hst_kpi_alert.o_hst_kpi_danger {
-    border-left: 3px solid hsl(var(--hst-destructive));
+    border-left-color: hsl(var(--hst-destructive));
 }
 
 /* Occupancy card keeps the same neutral icon circle as the others for visual consistency; only
@@ -121,4 +156,5 @@
 .o_hst_kpi_card .o_field_badge.badge {
     margin-top: 2px;
     font-size: 0.7em;
+    font-weight: 700;
 }

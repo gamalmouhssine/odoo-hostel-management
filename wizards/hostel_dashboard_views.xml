@@ -25,28 +25,28 @@
                             <div class="o_hst_kpi_icon"><i class="fa fa-sign-in" title="Arrivals"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="arrivals_today_count" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Arrivals Today</span>
+                                <span class="o_hst_kpi_label" title="Confirmed bookings with a check-in date of today.">Arrivals Today</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card o_hst_kpi_warning">
                             <div class="o_hst_kpi_icon"><i class="fa fa-sign-out" title="Departures"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="departures_today_count" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Departures Today</span>
+                                <span class="o_hst_kpi_label" title="Checked-in bookings with a check-out date of today.">Departures Today</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card o_hst_kpi_primary">
                             <div class="o_hst_kpi_icon"><i class="fa fa-bed" title="In-house"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="in_house_count" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">In-House Now</span>
+                                <span class="o_hst_kpi_label" title="Bookings currently checked in - guests physically on-site right now, listed below in In-House Guests.">In-House Now</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card">
                             <div class="o_hst_kpi_icon"><i class="fa fa-pie-chart" title="Occupancy"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="occupancy_ratio_today" widget="percentage" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Today's Occupancy</span>
+                                <span class="o_hst_kpi_label" title="Beds currently occupied ÷ total beds, right now. Bed-based: a dorm with free bunks counts as partly occupied, not fully.">Today's Occupancy</span>
                                 <field name="occupancy_status" widget="badge"
                                        decoration-success="occupancy_status == 'success'"
                                        decoration-warning="occupancy_status == 'warning'"
@@ -62,14 +62,14 @@
                             <div class="o_hst_kpi_icon"><i class="fa fa-paint-brush" title="Housekeeping"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="pending_housekeeping_count" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Housekeeping Tasks Open</span>
+                                <span class="o_hst_kpi_label" title="Housekeeping tasks still Pending or In Progress (not yet Done or Verified).">Housekeeping Tasks Open</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card o_hst_kpi_alert o_hst_kpi_danger">
                             <div class="o_hst_kpi_icon"><i class="fa fa-exclamation-triangle" title="Overdue invoices"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="overdue_invoice_count" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Overdue Invoices</span>
+                                <span class="o_hst_kpi_label" title="Invoiced folios whose invoice is past its due date and still not fully paid - the same set the daily overdue-invoice reminder notifies staff about.">Overdue Invoices</span>
                             </div>
                         </div>
                     </div>
@@ -80,28 +80,28 @@
                             <div class="o_hst_kpi_icon"><i class="fa fa-usd" title="Revenue"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="revenue_period" widget="monetary" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Revenue</span>
+                                <span class="o_hst_kpi_label" title="For every stay overlapping the date range: nights inside the range × that booking's locked-in nightly rate, summed across every room type.">Revenue</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card o_hst_kpi_accent">
                             <div class="o_hst_kpi_icon"><i class="fa fa-moon-o" title="Nights sold"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="nights_sold_period" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Nights Sold</span>
+                                <span class="o_hst_kpi_label" title="Total nights actually stayed within the date range, across every room type - only the portion of each stay inside the range counts.">Nights Sold</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card o_hst_kpi_primary">
                             <div class="o_hst_kpi_icon"><i class="fa fa-tag" title="ADR"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="adr_period" widget="monetary" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Avg. Daily Rate</span>
+                                <span class="o_hst_kpi_label" title="Average Daily Rate = Revenue ÷ Nights Sold - the average nightly rate actually charged, blended across every room type and booking.">Avg. Daily Rate</span>
                             </div>
                         </div>
                         <div class="o_hst_kpi_card">
                             <div class="o_hst_kpi_icon"><i class="fa fa-line-chart" title="Occupancy"/></div>
                             <div class="o_hst_kpi_body">
                                 <span class="o_hst_kpi_value"><field name="occupancy_ratio_period" widget="percentage" nolabel="1"/></span>
-                                <span class="o_hst_kpi_label">Avg. Occupancy</span>
+                                <span class="o_hst_kpi_label" title="Total Nights Sold ÷ total Available Room-Nights across every room type in the period.">Avg. Occupancy</span>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                         <list create="0" edit="0" delete="0" class="o_hst_list">
                             <field name="room_type_id"/>
                             <field name="nights_sold"/>
-                            <field name="available_room_nights"/>
+                            <field name="available_room_nights" string="Available"/>
                             <field name="occupancy_ratio" widget="percentage"/>
                             <field name="adr" widget="monetary"/>
                             <field name="revenue" widget="monetary"/>
