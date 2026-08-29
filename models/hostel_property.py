@@ -6,6 +6,7 @@ from odoo.addons.base.models.res_partner import _tz_get
 class HostelProperty(models.Model):
     _name = 'hostel.property'
     _description = 'Hostel Property'
+    _inherit = ['mail.thread']
     _order = 'name'
 
     name = fields.Char(required=True)
