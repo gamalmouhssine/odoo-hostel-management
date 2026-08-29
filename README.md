@@ -40,9 +40,27 @@ period revenue/ADR with a per-room-type breakdown.
 
 ![Rooms](guesthouse_management/static/description/screenshot_rooms_kanban.png)
 
+**Booking form** — guest, room or bed, dates, locked-in pricing, deposit, and the stay lifecycle.
+
+![Booking form](guesthouse_management/static/description/screenshot_booking_form.png)
+
+**Beds** — dorms are sold bed by bed, each with its own status and flags.
+
+![Beds](guesthouse_management/static/description/screenshot_beds.png)
+
 **Folios** — an itemized running bill per stay, invoiced through standard Odoo Invoicing.
 
+![Folios](guesthouse_management/static/description/screenshot_folios_list.png)
+
 ![Folio](guesthouse_management/static/description/screenshot_folio.png)
+
+**Housekeeping** — a cleaning task created automatically at check-out, tracked to verified.
+
+![Housekeeping](guesthouse_management/static/description/screenshot_housekeeping.png)
+
+**Guests** — standard Odoo contacts, extended with ID documents and stay history.
+
+![Guests](guesthouse_management/static/description/screenshot_guests.png)
 
 ## Features
 
