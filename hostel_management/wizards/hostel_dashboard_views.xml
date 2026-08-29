@@ -11,7 +11,7 @@
                          would be unreadable on a dark gradient - the filters stay below on the
                          normal background where their standard styling still works. -->
                     <div class="o_hst_hero">
-                        <div class="o_hst_hero_mark"><i class="fa fa-bed"/></div>
+                        <div class="o_hst_hero_mark"><i class="fa fa-bed" title="Hostel Management"/></div>
                         <div>
                             <div class="o_hst_hero_eyebrow">Hostel Management</div>
                             <h1 class="o_hst_hero_title">Front Desk Dashboard</h1>

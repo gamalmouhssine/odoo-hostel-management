@@ -18,8 +18,9 @@
                             <field name="is_hostel_guest"/>
                             <field name="nationality_id"/>
                             <field name="date_of_birth" groups="hostel_management.group_hostel_staff"/>
-                            <field name="is_blacklisted"/>
-                            <field name="blacklist_reason" invisible="not is_blacklisted"/>
+                            <field name="is_blacklisted" groups="hostel_management.group_hostel_staff"/>
+                            <field name="blacklist_reason" invisible="not is_blacklisted"
+                                   groups="hostel_management.group_hostel_staff"/>
                         </group>
                         <group string="Identity Document" groups="hostel_management.group_hostel_staff">
                             <field name="id_document_type_id"/>
@@ -43,17 +44,32 @@
         </field>
     </record>
 
-    <record id="view_partner_list_hostel_inherit" model="ir.ui.view">
-        <field name="name">res.partner.list.hostel.inherit</field>
+    <!-- A dedicated list for the Guests menu rather than inheriting base.view_partner_tree.
+         Modifying the global Contacts list would have applied this module's blacklist column and
+         red-row decoration to every other app's contact list too (Sales, Invoicing, Contacts
+         itself), and triggered a real "Access Rights Inconsistency" warning at install: the
+         shared list is also rendered for portal/public users, who can't read is_blacklisted.
+         A standalone view used only by this action avoids both problems. -->
+    <record id="hostel_guest_view_list" model="ir.ui.view">
+        <field name="name">hostel.guest.list</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="priority">99</field>
         <field name="arch" type="xml">
-            <list position="attributes">
-                <attribute name="decoration-danger">is_blacklisted</attribute>
+            <!-- No decoration-danger="is_blacklisted" on the <list> root: res.partner views are
+                 validated against portal/public groups too, and a root-level decoration can't
+                 carry a groups= attribute to exclude them, which produced an "Access Rights
+                 Inconsistency" warning at install. A group-restricted column conveys the same
+                 thing without the warning. -->
+            <list class="o_hst_list">
+                <field name="complete_name" string="Guest"/>
+                <field name="email" optional="show"/>
+                <field name="phone" class="o_force_ltr" optional="show"/>
+                <field name="nationality_id" optional="show"/>
+                <field name="stay_count" optional="show"/>
+                <field name="total_nights" optional="hide"/>
+                <field name="is_blacklisted" optional="show" widget="boolean_toggle"
+                       groups="hostel_management.group_hostel_staff"/>
             </list>
-            <field name="complete_name" position="after">
-                <field name="is_blacklisted" optional="show"/>
-            </field>
         </field>
     </record>
 
@@ -61,6 +77,10 @@
         <field name="name">Guests</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban'}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('hostel_guest_view_list')}),
+            (0, 0, {'view_mode': 'form'})]"/>
         <field name="domain">[('is_hostel_guest', '=', True)]</field>
         <field name="context">{'default_is_hostel_guest': True}</field>
     </record>

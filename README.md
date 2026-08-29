@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="static/description/banner.png" alt="Hostel Management for Odoo 19" width="100%"/>
+  <img src="hostel_management/static/description/banner.png" alt="Hostel Management for Odoo 19" width="100%"/>
 </p>
 
 <p align="center">
@@ -24,19 +24,19 @@ third-party Python packages. Installs and behaves identically on Community or En
 **Front desk dashboard** — arrivals, departures, in-house, occupancy, what needs attention, and
 period revenue/ADR with a per-room-type breakdown.
 
-![Dashboard](static/description/main_screenshot.png)
+![Dashboard](hostel_management/static/description/main_screenshot.png)
 
 **Bookings** — folio status, activity reminders, and the full stay lifecycle at a glance.
 
-![Bookings](static/description/screenshot_bookings.png)
+![Bookings](hostel_management/static/description/screenshot_bookings.png)
 
 **Rooms** — kanban grouped by property, with independent occupancy and housekeeping status.
 
-![Rooms](static/description/screenshot_rooms_kanban.png)
+![Rooms](hostel_management/static/description/screenshot_rooms_kanban.png)
 
 **Folios** — an itemized running bill per stay, invoiced through standard Odoo Invoicing.
 
-![Folio](static/description/screenshot_folio.png)
+![Folio](hostel_management/static/description/screenshot_folio.png)
 
 ## Features
 
@@ -138,5 +138,5 @@ everything; assigning at least one property restricts them to it.
 
 ## License &amp; support
 
-Licensed under the [Odoo Proprietary License v1.0 (OPL-1)](LICENSE). Available on the Odoo Apps
-Store. Release notes in [CHANGELOG.md](CHANGELOG.md).
+Licensed under the [Odoo Proprietary License v1.0 (OPL-1)](hostel_management/LICENSE). Available on the Odoo Apps
+Store. Release notes in [CHANGELOG.md](hostel_management/CHANGELOG.md).
