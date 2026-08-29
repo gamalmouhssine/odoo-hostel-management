@@ -12,14 +12,17 @@
 
 /* Odoo's own default form width cap lives on .o_form_sheet_bg (the sheet's parent wrapper, a
    descendant of the <form class="o_hst_dashboard"> element), not .o_form_sheet itself - a
-   dashboard with several data tables should use the full available width like a list view
-   does, not the narrow centered column meant for a data-entry form. */
+   dashboard with several data tables should use more of the available width than the narrow
+   column meant for a data-entry form, but a truly unbounded sheet on a very wide screen just
+   moves the "too much dead space" problem inside the cards/table instead of next to them (each
+   grid row stretches individual cards/columns apart rather than leaving space unused) - capped
+   at a generous but bounded width instead of removed entirely. */
 .o_hst_dashboard .o_form_sheet_bg {
-    max-width: none;
+    max-width: 1440px;
 }
 
 .o_hst_dashboard .o_form_sheet {
-    max-width: none;
+    max-width: 1440px;
     width: 100%;
 }
 
@@ -54,11 +57,22 @@
 
 .o_hst_dashboard .o_hst_list {
     margin-top: 8px;
+    /* Odoo's list view gives its text/relational columns (Room Type, Booking, Guest...) the
+       leftover width of whatever container they're in - on a very wide sheet that stretches a
+       gap open between those and the narrow numeric columns instead of leaving space at the
+       table's own right edge. Capping the table itself keeps column proportions sane
+       regardless of how wide the sheet around it is. */
+    max-width: 900px;
 }
 
 .o_hst_kpi_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* Capped at 280px (not 1fr) so a row with only 2-3 cards (Needs Attention, This Period on
+       a narrower window) doesn't stretch each card to fill the leftover space - auto-fit
+       collapses unused tracks entirely when there are fewer items than would fit, so any extra
+       row width past each card's 280px cap is simply left as trailing whitespace, not
+       distributed into the cards themselves. */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 280px));
     gap: 16px;
     margin: 8px 0 24px;
 }
