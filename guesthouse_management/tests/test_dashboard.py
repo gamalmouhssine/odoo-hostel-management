@@ -242,7 +242,7 @@ class TestDashboard(TransactionCase):
         self.assertEqual(booking_line_commands[0][2]['booking_id'], booking.id)
 
     def test_get_view_renders_for_staff(self):
-        staff_group = self.env.ref('hostel_management.group_hostel_staff')
+        staff_group = self.env.ref('guesthouse_management.group_hostel_staff')
         staff_user = self.env['res.users'].create({
             'name': 'Dashboard Staff', 'login': 'dashboard_staff@example.com',
             'group_ids': [(6, 0, [staff_group.id])],

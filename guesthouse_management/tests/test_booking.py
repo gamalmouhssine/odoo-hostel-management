@@ -248,7 +248,7 @@ class TestBooking(TransactionCase):
 
     def test_cron_checkout_reminder_pops_notification_and_flags_once(self):
         self._silence_other_pending_reminders()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         manager = self.env['res.users'].create({
             'name': 'Reminder Manager', 'login': 'reminder_manager@example.com',
             'group_ids': [(6, 0, [manager_group.id])],
@@ -281,7 +281,7 @@ class TestBooking(TransactionCase):
 
     def test_cron_checkout_reminder_respects_property_scoping(self):
         self._silence_other_pending_reminders()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         other_property = self.env['hostel.property'].create({'name': 'Other Property', 'code': 'OTHERP'})
         scoped_manager = self.env['res.users'].create({
             'name': 'Other Property Manager', 'login': 'other_property_manager@example.com',
@@ -302,7 +302,7 @@ class TestBooking(TransactionCase):
 
     def test_cron_arrival_reminder_pops_notification_and_flags_once(self):
         self._silence_other_pending_reminders()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         manager = self.env['res.users'].create({
             'name': 'Arrival Manager', 'login': 'arrival_manager@example.com',
             'group_ids': [(6, 0, [manager_group.id])],
@@ -345,7 +345,7 @@ class TestBooking(TransactionCase):
 
     def test_cron_auto_no_show_releases_unit_and_notifies(self):
         self._silence_other_pending_reminders()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         manager = self.env['res.users'].create({
             'name': 'No-show Manager', 'login': 'no_show_manager@example.com',
             'group_ids': [(6, 0, [manager_group.id])],
@@ -378,7 +378,7 @@ class TestBooking(TransactionCase):
 
     def test_cron_overstay_reminder_pops_notification_and_flags_once(self):
         self._silence_other_pending_reminders()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         manager = self.env['res.users'].create({
             'name': 'Overstay Manager', 'login': 'overstay_manager@example.com',
             'group_ids': [(6, 0, [manager_group.id])],

@@ -13,7 +13,7 @@ class HostelRoomType(models.Model):
     sleeping_type_id = fields.Many2one(
         'hostel.sleeping.type', string='Sleeping Type', required=True,
         default=lambda self: self.env.ref(
-            'hostel_management.hostel_sleeping_type_dorm', raise_if_not_found=False))
+            'guesthouse_management.hostel_sleeping_type_dorm', raise_if_not_found=False))
     bed_type_id = fields.Many2one('hostel.bed.type', string='Bed Type')
     amenity_ids = fields.Many2many('hostel.amenity', string='Amenities')
     photo_ids = fields.Many2many(

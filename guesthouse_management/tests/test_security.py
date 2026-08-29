@@ -20,8 +20,8 @@ class TestSecurity(TransactionCase):
         cls.room_a = cls.env['hostel.room'].create({'name': 'RA1', 'room_type_id': cls.room_type_a.id})
         cls.room_b = cls.env['hostel.room'].create({'name': 'RB1', 'room_type_id': cls.room_type_b.id})
 
-        staff_group = cls.env.ref('hostel_management.group_hostel_staff')
-        manager_group = cls.env.ref('hostel_management.group_hostel_manager')
+        staff_group = cls.env.ref('guesthouse_management.group_hostel_staff')
+        manager_group = cls.env.ref('guesthouse_management.group_hostel_manager')
         cls.staff_user_a = cls.env['res.users'].create({
             'name': 'Property A Staff', 'login': 'property_a_staff@example.com',
             'group_ids': [(6, 0, [staff_group.id])],
@@ -58,7 +58,7 @@ class TestSecurity(TransactionCase):
         self.assertIn(self.room_b, rooms)
 
     def test_housekeeping_group_cannot_read_bookings(self):
-        housekeeping_group = self.env.ref('hostel_management.group_hostel_housekeeping')
+        housekeeping_group = self.env.ref('guesthouse_management.group_hostel_housekeeping')
         housekeeping_user = self.env['res.users'].create({
             'name': 'Housekeeper', 'login': 'housekeeper@example.com',
             'group_ids': [(6, 0, [housekeeping_group.id])],

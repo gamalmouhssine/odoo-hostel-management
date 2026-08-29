@@ -157,6 +157,6 @@
         <field name="name">Dashboard</field>
         <field name="res_model">hostel.dashboard</field>
         <field name="view_mode">form</field>
-        <field name="context">{'form_view_ref': 'hostel_management.hostel_dashboard_view_form'}</field>
+        <field name="context">{'form_view_ref': 'guesthouse_management.hostel_dashboard_view_form'}</field>
     </record>
 </odoo>

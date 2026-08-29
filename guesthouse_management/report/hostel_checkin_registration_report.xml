@@ -4,8 +4,8 @@
         <field name="name">Check-in Registration Card</field>
         <field name="model">hostel.booking</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">hostel_management.report_hostel_checkin_registration</field>
-        <field name="report_file">hostel_management.report_hostel_checkin_registration</field>
+        <field name="report_name">guesthouse_management.report_hostel_checkin_registration</field>
+        <field name="report_file">guesthouse_management.report_hostel_checkin_registration</field>
         <field name="binding_model_id" ref="model_hostel_booking"/>
         <field name="binding_type">report</field>
     </record>

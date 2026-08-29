@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="hostel_management/static/description/banner.png" alt="Hostel Management for Odoo 19" width="100%"/>
+  <img src="guesthouse_management/static/description/banner.png" alt="Hostel Management for Odoo 19" width="100%"/>
 </p>
 
 <p align="center">
@@ -23,26 +23,26 @@ third-party Python packages. Installs and behaves identically on Community or En
 
 Set the property up once, then every stay follows the same path — most of it automatic.
 
-![How Hostel Management works](hostel_management/static/description/workflow.png)
+![How Hostel Management works](guesthouse_management/static/description/workflow.png)
 
 ## Screenshots
 
 **Front desk dashboard** — arrivals, departures, in-house, occupancy, what needs attention, and
 period revenue/ADR with a per-room-type breakdown.
 
-![Dashboard](hostel_management/static/description/main_screenshot.png)
+![Dashboard](guesthouse_management/static/description/main_screenshot.png)
 
 **Bookings** — folio status, activity reminders, and the full stay lifecycle at a glance.
 
-![Bookings](hostel_management/static/description/screenshot_bookings.png)
+![Bookings](guesthouse_management/static/description/screenshot_bookings.png)
 
 **Rooms** — kanban grouped by property, with independent occupancy and housekeeping status.
 
-![Rooms](hostel_management/static/description/screenshot_rooms_kanban.png)
+![Rooms](guesthouse_management/static/description/screenshot_rooms_kanban.png)
 
 **Folios** — an itemized running bill per stay, invoiced through standard Odoo Invoicing.
 
-![Folio](hostel_management/static/description/screenshot_folio.png)
+![Folio](guesthouse_management/static/description/screenshot_folio.png)
 
 ## Features
 
@@ -97,12 +97,12 @@ live sync (manual `source`/`external_ref` logging only).
 
 1. Copy this folder into your Odoo addons path.
 2. Restart Odoo and update the Apps list (Developer Mode on).
-3. Search for **Hostel Management** and install.
+3. Search for **Guesthouse & Hostel Management** and install.
 
 Or from the command line:
 
 ```bash
-./odoo-bin -c odoo.conf -d your_database -i hostel_management
+./odoo-bin -c odoo.conf -d your_database -i guesthouse_management
 ```
 
 To try it with sample data, add `--with-demo` on a **fresh** database (Odoo only loads demo data
@@ -136,13 +136,13 @@ everything; assigning at least one property restricts them to it.
 ## Testing
 
 ```bash
-./odoo-bin -c odoo.conf -d your_database -u hostel_management \
-  --test-enable --test-tags /hostel_management --stop-after-init
+./odoo-bin -c odoo.conf -d your_database -u guesthouse_management \
+  --test-enable --test-tags /guesthouse_management --stop-after-init
 ```
 
 115 tests across master data, bookings, folios, housekeeping, dashboard, reports, and security.
 
 ## License &amp; support
 
-Licensed under the [Odoo Proprietary License v1.0 (OPL-1)](hostel_management/LICENSE). Available on the Odoo Apps
-Store. Release notes in [CHANGELOG.md](hostel_management/CHANGELOG.md).
+Licensed under the [Odoo Proprietary License v1.0 (OPL-1)](guesthouse_management/LICENSE). Available on the Odoo Apps
+Store. Release notes in [CHANGELOG.md](guesthouse_management/CHANGELOG.md).

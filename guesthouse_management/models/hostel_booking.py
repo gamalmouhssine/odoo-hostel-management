@@ -256,7 +256,7 @@ class HostelBooking(models.Model):
             # missing guest email shouldn't block confirming the booking itself.
             if booking.guest_id.email:
                 self.env.ref(
-                    'hostel_management.mail_template_hostel_booking_confirmation'
+                    'guesthouse_management.mail_template_hostel_booking_confirmation'
                 ).send_mail(booking.id, force_send=False)
 
     def action_cancel(self):
@@ -334,7 +334,7 @@ class HostelBooking(models.Model):
         if self.folio_ids:
             return self.folio_ids[0]
         stay_charge_type = self.env.ref(
-            'hostel_management.hostel_charge_type_stay', raise_if_not_found=False)
+            'guesthouse_management.hostel_charge_type_stay', raise_if_not_found=False)
         unit_name = (self.room_id or self.bed_id).display_name
         return self.env['hostel.folio'].create({
             'booking_id': self.id,
@@ -370,8 +370,8 @@ class HostelBooking(models.Model):
         "notify about nothing"). Shared by all the front-desk reminder crons below so the
         recipient logic only lives in one place."""
         notifiable = (
-            self.env.ref('hostel_management.group_hostel_staff').user_ids
-            | self.env.ref('hostel_management.group_hostel_manager').user_ids
+            self.env.ref('guesthouse_management.group_hostel_staff').user_ids
+            | self.env.ref('guesthouse_management.group_hostel_manager').user_ids
         )
         return notifiable.filtered(
             lambda u: not u.hostel_property_ids or booking.property_id in u.hostel_property_ids)

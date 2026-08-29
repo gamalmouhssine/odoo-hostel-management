@@ -18,7 +18,7 @@ class HostelOccupancyReportWizard(models.TransientModel):
         self.ensure_one()
         if self.date_to < self.date_from:
             raise UserError("The end date must be on or after the start date.")
-        return self.env.ref('hostel_management.action_report_hostel_occupancy').report_action(self)
+        return self.env.ref('guesthouse_management.action_report_hostel_occupancy').report_action(self)
 
     def _get_occupancy_lines(self):
         """One aggregate row per room type that had any qualifying booking in range: nights

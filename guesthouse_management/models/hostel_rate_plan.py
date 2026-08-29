@@ -15,7 +15,7 @@ class HostelRatePlan(models.Model):
     cancellation_policy_id = fields.Many2one(
         'hostel.cancellation.policy', string='Cancellation Policy', required=True,
         default=lambda self: self.env.ref(
-            'hostel_management.hostel_cancellation_policy_flexible', raise_if_not_found=False))
+            'guesthouse_management.hostel_cancellation_policy_flexible', raise_if_not_found=False))
     min_stay_nights = fields.Integer(default=1)
     max_stay_nights = fields.Integer(help="0 means no maximum.")
     active = fields.Boolean(default=True)

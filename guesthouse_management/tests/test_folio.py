@@ -228,7 +228,7 @@ class TestFolio(TransactionCase):
 
     def test_cron_overdue_invoice_reminder_notifies_and_flags_once(self):
         self._silence_other_pending_overdue_invoices()
-        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager_group = self.env.ref('guesthouse_management.group_hostel_manager')
         manager = self.env['res.users'].create({
             'name': 'Overdue Invoice Manager', 'login': 'overdue_invoice_manager@example.com',
             'group_ids': [(6, 0, [manager_group.id])],

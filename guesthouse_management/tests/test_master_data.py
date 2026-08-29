@@ -81,7 +81,7 @@ class TestMasterData(TransactionCase):
             'room_type_id': self.room_type.id,
             'price_per_night': 9.0,
             'cancellation_policy_id': self.env.ref(
-                'hostel_management.hostel_cancellation_policy_non_refundable').id,
+                'guesthouse_management.hostel_cancellation_policy_non_refundable').id,
         })
         self.assertEqual(rate_plan.room_type_id, self.room_type)
         self.assertEqual(rate_plan.currency_id, self.room_type.currency_id)

@@ -4,8 +4,8 @@
         <field name="name">Daily Arrivals &amp; Departures</field>
         <field name="model">hostel.property</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">hostel_management.report_hostel_arrivals_departures</field>
-        <field name="report_file">hostel_management.report_hostel_arrivals_departures</field>
+        <field name="report_name">guesthouse_management.report_hostel_arrivals_departures</field>
+        <field name="report_file">guesthouse_management.report_hostel_arrivals_departures</field>
         <field name="binding_model_id" ref="model_hostel_property"/>
         <field name="binding_type">report</field>
     </record>

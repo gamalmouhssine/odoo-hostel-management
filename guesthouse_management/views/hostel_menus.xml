@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_hostel_management_root" name="Hostel" sequence="10"
-              groups="hostel_management.group_hostel_staff,hostel_management.group_hostel_housekeeping"
-              web_icon="hostel_management,static/description/icon.png"/>
+    <menuitem id="menu_guesthouse_management_root" name="Hostel" sequence="10"
+              groups="guesthouse_management.group_hostel_staff,guesthouse_management.group_hostel_housekeeping"
+              web_icon="guesthouse_management,static/description/icon.png"/>
 
-    <menuitem id="menu_hostel_dashboard" name="Dashboard" parent="menu_hostel_management_root"
-              action="hostel_dashboard_action" groups="hostel_management.group_hostel_staff" sequence="5"/>
+    <menuitem id="menu_hostel_dashboard" name="Dashboard" parent="menu_guesthouse_management_root"
+              action="hostel_dashboard_action" groups="guesthouse_management.group_hostel_staff" sequence="5"/>
 
-    <menuitem id="menu_hostel_bookings" name="Bookings" parent="menu_hostel_management_root"
-              action="hostel_booking_action" groups="hostel_management.group_hostel_staff" sequence="10"/>
+    <menuitem id="menu_hostel_bookings" name="Bookings" parent="menu_guesthouse_management_root"
+              action="hostel_booking_action" groups="guesthouse_management.group_hostel_staff" sequence="10"/>
 
-    <menuitem id="menu_hostel_folios" name="Folios" parent="menu_hostel_management_root"
-              action="hostel_folio_action" groups="hostel_management.group_hostel_staff" sequence="15"/>
+    <menuitem id="menu_hostel_folios" name="Folios" parent="menu_guesthouse_management_root"
+              action="hostel_folio_action" groups="guesthouse_management.group_hostel_staff" sequence="15"/>
 
     <!-- Visible to the whole app (staff/manager/housekeeping) - unlike Bookings/Folios/Guests,
          housekeeping is exactly the group this menu exists for. -->
-    <menuitem id="menu_hostel_housekeeping" name="Housekeeping" parent="menu_hostel_management_root"
+    <menuitem id="menu_hostel_housekeeping" name="Housekeeping" parent="menu_guesthouse_management_root"
               action="hostel_housekeeping_task_action" sequence="18"/>
 
-    <menuitem id="menu_hostel_reports" name="Reports" parent="menu_hostel_management_root"
-              groups="hostel_management.group_hostel_staff" sequence="90"/>
+    <menuitem id="menu_hostel_reports" name="Reports" parent="menu_guesthouse_management_root"
+              groups="guesthouse_management.group_hostel_staff" sequence="90"/>
     <menuitem id="menu_hostel_reports_occupancy" name="Occupancy Report" parent="menu_hostel_reports"
               action="hostel_occupancy_report_wizard_action" sequence="10"/>
     <menuitem id="menu_hostel_reports_revenue" name="Revenue &amp; Occupancy" parent="menu_hostel_reports"
               action="hostel_booking_action_revenue" sequence="20"/>
 
-    <menuitem id="menu_hostel_guests" name="Guests" parent="menu_hostel_management_root"
-              action="hostel_guest_action" groups="hostel_management.group_hostel_staff" sequence="20"/>
+    <menuitem id="menu_hostel_guests" name="Guests" parent="menu_guesthouse_management_root"
+              action="hostel_guest_action" groups="guesthouse_management.group_hostel_staff" sequence="20"/>
 
-    <menuitem id="menu_hostel_configuration" name="Configuration" parent="menu_hostel_management_root"
-              groups="hostel_management.group_hostel_staff" sequence="100"/>
+    <menuitem id="menu_hostel_configuration" name="Configuration" parent="menu_guesthouse_management_root"
+              groups="guesthouse_management.group_hostel_staff" sequence="100"/>
     <menuitem id="menu_hostel_configuration_properties" name="Properties" parent="menu_hostel_configuration"
               action="hostel_property_action" sequence="5"/>
     <menuitem id="menu_hostel_configuration_room_types" name="Room Types" parent="menu_hostel_configuration"
@@ -42,7 +42,7 @@
               action="hostel_bed_action" sequence="30"/>
 
     <menuitem id="menu_hostel_configuration_lists" name="Config Lists" parent="menu_hostel_configuration"
-              groups="hostel_management.group_hostel_manager" sequence="200"/>
+              groups="guesthouse_management.group_hostel_manager" sequence="200"/>
     <menuitem id="menu_hostel_configuration_amenities" name="Amenities" parent="menu_hostel_configuration_lists"
               action="hostel_amenity_action" sequence="10"/>
     <menuitem id="menu_hostel_configuration_sleeping_types" name="Sleeping Types" parent="menu_hostel_configuration_lists"

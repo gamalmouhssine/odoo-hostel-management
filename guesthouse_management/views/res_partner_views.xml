@@ -17,12 +17,12 @@
                         <group string="Guest">
                             <field name="is_hostel_guest"/>
                             <field name="nationality_id"/>
-                            <field name="date_of_birth" groups="hostel_management.group_hostel_staff"/>
-                            <field name="is_blacklisted" groups="hostel_management.group_hostel_staff"/>
+                            <field name="date_of_birth" groups="guesthouse_management.group_hostel_staff"/>
+                            <field name="is_blacklisted" groups="guesthouse_management.group_hostel_staff"/>
                             <field name="blacklist_reason" invisible="not is_blacklisted"
-                                   groups="hostel_management.group_hostel_staff"/>
+                                   groups="guesthouse_management.group_hostel_staff"/>
                         </group>
-                        <group string="Identity Document" groups="hostel_management.group_hostel_staff">
+                        <group string="Identity Document" groups="guesthouse_management.group_hostel_staff">
                             <field name="id_document_type_id"/>
                             <field name="id_document_number"/>
                             <field name="id_document" filename="id_document_filename"/>
@@ -68,7 +68,7 @@
                 <field name="stay_count" optional="show"/>
                 <field name="total_nights" optional="hide"/>
                 <field name="is_blacklisted" optional="show" widget="boolean_toggle"
-                       groups="hostel_management.group_hostel_staff"/>
+                       groups="guesthouse_management.group_hostel_staff"/>
             </list>
         </field>
     </record>

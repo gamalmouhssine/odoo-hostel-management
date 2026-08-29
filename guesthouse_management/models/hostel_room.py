@@ -93,7 +93,7 @@ class HostelRoom(models.Model):
         if existing:
             return existing
         checkout_clean_type = self.env.ref(
-            'hostel_management.hostel_housekeeping_task_type_checkout_clean', raise_if_not_found=False)
+            'guesthouse_management.hostel_housekeeping_task_type_checkout_clean', raise_if_not_found=False)
         return self.env['hostel.housekeeping.task'].create({
             'room_id': self.id,
             'type_id': checkout_clean_type.id if checkout_clean_type else False,

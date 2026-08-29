@@ -12,7 +12,7 @@ class HostelChargeType(models.Model):
         string='Is Stay Charge',
         help="Marks the charge type used for the auto-generated nightly-stay line. Informational "
              "only - not enforced - but keep exactly one active record flagged this way, since "
-             "check-in looks it up by the hostel_management.hostel_charge_type_stay XML ID.")
+             "check-in looks it up by the guesthouse_management.hostel_charge_type_stay XML ID.")
     sequence = fields.Integer(default=10)
     active = fields.Boolean(default=True)
 

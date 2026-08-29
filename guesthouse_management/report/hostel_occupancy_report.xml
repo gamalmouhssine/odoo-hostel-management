@@ -4,8 +4,8 @@
         <field name="name">Occupancy Summary</field>
         <field name="model">hostel.occupancy.report.wizard</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">hostel_management.report_hostel_occupancy</field>
-        <field name="report_file">hostel_management.report_hostel_occupancy</field>
+        <field name="report_name">guesthouse_management.report_hostel_occupancy</field>
+        <field name="report_file">guesthouse_management.report_hostel_occupancy</field>
     </record>
 
     <template id="report_hostel_occupancy">

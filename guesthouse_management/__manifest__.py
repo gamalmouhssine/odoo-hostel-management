@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Hostel Management',
+    'name': 'Guesthouse & Hostel Management',
     'version': '19.0.1.0.1',
     'category': 'Services/Hostel',
-    'summary': 'Guest hostel PMS: multi-property rooms/beds, bookings, folios/billing, housekeeping, live front-desk alerts, and reports — Community-only.',
+    'summary': 'Guesthouse & hostel PMS: multi-property rooms/beds, bookings, folios/billing, housekeeping, live front-desk alerts, and reports — Community-only.',
     'description': """
 Hostel Management
 ==================
@@ -78,12 +78,12 @@ identically on Community or Enterprise:
     ],
     'assets': {
         'web.assets_backend': [
-            'hostel_management/static/src/css/brand.css',
-            'hostel_management/static/src/css/theme.css',
-            'hostel_management/static/src/css/kanban.css',
-            'hostel_management/static/src/css/forms.css',
-            'hostel_management/static/src/css/lists.css',
-            'hostel_management/static/src/css/dashboard.css',
+            'guesthouse_management/static/src/css/brand.css',
+            'guesthouse_management/static/src/css/theme.css',
+            'guesthouse_management/static/src/css/kanban.css',
+            'guesthouse_management/static/src/css/forms.css',
+            'guesthouse_management/static/src/css/lists.css',
+            'guesthouse_management/static/src/css/dashboard.css',
         ],
     },
     # Banner first (the store list tile), then the screenshots shown on the listing page. The

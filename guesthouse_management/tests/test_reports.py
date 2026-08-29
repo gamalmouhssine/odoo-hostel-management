@@ -94,11 +94,11 @@ class TestReports(TransactionCase):
         })
         report_model = self.env['ir.actions.report']
         for report_ref, res_ids in [
-            ('hostel_management.action_report_hostel_booking_confirmation', [booking.id]),
-            ('hostel_management.action_report_hostel_checkin_registration', [booking.id]),
-            ('hostel_management.action_report_hostel_folio', [folio.id]),
-            ('hostel_management.action_report_hostel_arrivals_departures', [self.property.id]),
-            ('hostel_management.action_report_hostel_occupancy', [wizard.id]),
+            ('guesthouse_management.action_report_hostel_booking_confirmation', [booking.id]),
+            ('guesthouse_management.action_report_hostel_checkin_registration', [booking.id]),
+            ('guesthouse_management.action_report_hostel_folio', [folio.id]),
+            ('guesthouse_management.action_report_hostel_arrivals_departures', [self.property.id]),
+            ('guesthouse_management.action_report_hostel_occupancy', [wizard.id]),
         ]:
             html, _report_type = report_model._render_qweb_html(report_ref, res_ids)
             self.assertTrue(html, "%s rendered empty output" % report_ref)
