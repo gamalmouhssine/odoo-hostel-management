@@ -88,10 +88,12 @@ identically on Community or Enterprise:
     },
     # Banner first (the store list tile), then the screenshots shown on the listing page. The
     # Apps FAQ says the image whose name ends in "_screenshot" is picked as the large display
-    # image, hence main_screenshot.png rather than a descriptive name for the dashboard shot.
+    # image, so main_screenshot.png is a purpose-built cover (bold wordmark, legible at card
+    # size) rather than a shrunk-down UI screenshot, which was unreadable on the store tile.
     'images': [
         'static/description/banner.png',
         'static/description/main_screenshot.png',
+        'static/description/screenshot_dashboard.png',
         'static/description/workflow.png',
         'static/description/screenshot_bookings.png',
         'static/description/screenshot_rooms_kanban.png',

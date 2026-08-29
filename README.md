@@ -30,7 +30,7 @@ Set the property up once, then every stay follows the same path — most of it a
 **Front desk dashboard** — arrivals, departures, in-house, occupancy, what needs attention, and
 period revenue/ADR with a per-room-type breakdown.
 
-![Dashboard](guesthouse_management/static/description/main_screenshot.png)
+![Dashboard](guesthouse_management/static/description/screenshot_dashboard.png)
 
 **Bookings** — folio status, activity reminders, and the full stay lifecycle at a glance.
 
