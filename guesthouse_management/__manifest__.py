@@ -40,7 +40,7 @@ identically on Community or Enterprise:
 """,
     'author': 'Hostel Management',
     'license': 'OPL-1',
-    'price': 100.00,
+    'price': 60.00,
     'currency': 'USD',
     'depends': ['base', 'mail', 'bus', 'contacts', 'account', 'product', 'calendar'],
     'data': [
