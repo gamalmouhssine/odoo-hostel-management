@@ -36,5 +36,14 @@
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
         </record>
+
+        <record id="ir_cron_hostel_overdue_invoice_reminders" model="ir.cron">
+            <field name="name">Hostel: Overdue Invoice Reminders</field>
+            <field name="model_id" ref="model_hostel_folio"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_overdue_invoice_reminders()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
     </data>
 </odoo>

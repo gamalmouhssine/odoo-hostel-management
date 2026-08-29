@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import date, timedelta
+import json
+from datetime import timedelta
 
+from odoo.addons.bus.models.bus import channel_with_db, json_dump
+from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase, tagged
 
@@ -22,7 +25,10 @@ class TestFolio(TransactionCase):
             'name': 'TF1', 'room_type_id': cls.room_type.id,
         })
         cls.guest = cls.env['res.partner'].create({'name': 'Folio Guest', 'is_hostel_guest': True})
-        cls.today = date.today()
+        # Match fields.Date.context_today(), not bare date.today() - see test_booking.py's
+        # self.today fixture for why (the two can disagree across a timezone boundary, and the
+        # overdue-invoice cron below computes "today" the same context-aware way).
+        cls.today = fields.Date.context_today(cls.env['hostel.booking'])
 
     def _make_checked_in_booking(self, nights=3):
         booking = self.env['hostel.booking'].create({
@@ -203,6 +209,87 @@ class TestFolio(TransactionCase):
             active_model='account.move', active_ids=invoice.ids,
         ).create({})
         payment_register._create_payments()
-        self.assertEqual(invoice.payment_state, 'paid')
         self.assertEqual(folio.state, 'invoiced')
         self.assertEqual(folio.payment_state, 'paid')
+
+    def _manager_channel(self, manager):
+        return json_dump(channel_with_db(self.env.cr.dbname, manager.partner_id))
+
+    def _silence_other_pending_overdue_invoices(self):
+        # Same shared-dev-database hermeticity concern as test_booking.py's reminder-cron
+        # tests: a freshly-created, unrestricted manager would also get notified about any
+        # OTHER real overdue folio already sitting in this database (e.g. demo data), which
+        # would break an exact-count assertion below.
+        self.env['hostel.folio'].search([
+            ('state', '=', 'invoiced'),
+            ('invoice_id.payment_state', 'not in', ('paid', 'in_payment', 'reversed')),
+            ('invoice_id.invoice_date_due', '<', self.today),
+        ]).write({'payment_reminder_notified': True})
+
+    def test_cron_overdue_invoice_reminder_notifies_and_flags_once(self):
+        self._silence_other_pending_overdue_invoices()
+        manager_group = self.env.ref('hostel_management.group_hostel_manager')
+        manager = self.env['res.users'].create({
+            'name': 'Overdue Invoice Manager', 'login': 'overdue_invoice_manager@example.com',
+            'group_ids': [(6, 0, [manager_group.id])],
+        })
+        booking = self._make_checked_in_booking()
+        folio = booking.folio_ids[0]
+        folio.action_create_invoice()
+        invoice = folio.invoice_id
+        invoice.action_post()
+        invoice.invoice_date_due = self.today - timedelta(days=1)
+        self.assertFalse(folio.payment_reminder_notified)
+
+        self.env.cr.precommit.data.pop('bus.bus.values', None)
+        self.env['hostel.folio']._cron_overdue_invoice_reminders()
+        queued = self.env.cr.precommit.data.get('bus.bus.values', [])
+        matches = [n for n in queued if n['channel'] == self._manager_channel(manager)]
+        self.assertEqual(len(matches), 1)
+        payload = json.loads(matches[0]['message'])['payload']
+        self.assertEqual(payload['type'], 'danger')
+        self.assertIn(booking.name, payload['message'])
+        self.assertTrue(folio.payment_reminder_notified)
+
+        # Re-running the cron must not notify the same overdue invoice a second time.
+        self.env.cr.precommit.data.pop('bus.bus.values', None)
+        self.env['hostel.folio']._cron_overdue_invoice_reminders()
+        self.assertFalse(self.env.cr.precommit.data.get('bus.bus.values'))
+
+    def test_cron_overdue_invoice_reminder_ignores_invoice_not_yet_due(self):
+        booking = self._make_checked_in_booking()
+        folio = booking.folio_ids[0]
+        folio.action_create_invoice()
+        folio.invoice_id.action_post()
+        folio.invoice_id.invoice_date_due = self.today + timedelta(days=5)
+
+        self.env['hostel.folio']._cron_overdue_invoice_reminders()
+        self.assertFalse(folio.payment_reminder_notified)
+
+    def test_cron_overdue_invoice_reminder_ignores_paid_invoice(self):
+        booking = self._make_checked_in_booking()
+        folio = booking.folio_ids[0]
+        folio.action_create_invoice()
+        invoice = folio.invoice_id
+        invoice.action_post()
+        invoice.invoice_date_due = self.today - timedelta(days=1)
+        payment_register = self.env['account.payment.register'].with_context(
+            active_model='account.move', active_ids=invoice.ids,
+        ).create({})
+        payment_register._create_payments()
+
+        self.env['hostel.folio']._cron_overdue_invoice_reminders()
+        self.assertFalse(folio.payment_reminder_notified)
+
+    def test_reinvoicing_resets_payment_reminder_flag(self):
+        booking = self._make_checked_in_booking()
+        folio = booking.folio_ids[0]
+        folio.action_create_invoice()
+        folio.invoice_id.action_post()
+        folio.invoice_id.invoice_date_due = self.today - timedelta(days=1)
+        self.env['hostel.folio']._cron_overdue_invoice_reminders()
+        self.assertTrue(folio.payment_reminder_notified)
+
+        folio.invoice_id.button_cancel()
+        folio.action_create_invoice()
+        self.assertFalse(folio.payment_reminder_notified)
